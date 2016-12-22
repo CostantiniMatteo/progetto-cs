@@ -20,7 +20,7 @@ namespace ProgettoCS
 
         private Listener listener;
         GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph;
-        private TemplateQueue<string> stringQueue;
+        private TemplateQueue<string> logQueue;
         private TemplateQueue<List<List<double>>> valQueue;
 
         public Form()
@@ -52,10 +52,10 @@ namespace ProgettoCS
             myPane.XAxis.Scale.Max = 1;
             myPane.AxisChange();
             zedGraphControl1.Invalidate();*/
-            stringQueue = new TemplateQueue<string>();
+            logQueue = new TemplateQueue<string>();
             valQueue = new TemplateQueue<List<List<double>>>();
 
-            listener = new Listener(valQueue, stringQueue);
+            listener = new Listener(valQueue, logQueue);
 
             Thread t1 = new Thread(drawModule);
             Thread t2 = new Thread(listener.parser);
@@ -69,9 +69,9 @@ namespace ProgettoCS
         public void draw()
         {
             List<List<double>> val;
-            PointPairList pointPl = new PointPairList();
-            PointPairList pointPl2 = new PointPairList();
-            PointPairList pointPl3 = new PointPairList();
+            PointPairList accelerometerPPL = new PointPairList();
+            PointPairList gyroscopePPL = new PointPairList();
+            PointPairList magnetometerPPL = new PointPairList();
 
             while (true)
             {
@@ -81,16 +81,18 @@ namespace ProgettoCS
                     int size = val.Count();
                     for (int i = 1; i < size; i++)
                     {
-                        pointPl.Add(val[i][0], val[i][1]);
-                        pointPl2.Add(val[i][3], val[i][4]);
-                        pointPl3.Add(val[i][6], val[i][7]);
+                        accelerometerPPL.Add(val[i][0], val[i][1]);
+                        gyroscopePPL.Add(val[i][3], val[i][4]);
+                        magnetometerPPL.Add(val[i][6], val[i][7]);
                     }
+
                     zedGraphControl1.GraphPane.CurveList.Clear();
                     zedGraphControl2.GraphPane.CurveList.Clear();
                     zedGraphControl3.GraphPane.CurveList.Clear();
-                    LineItem myCurve = accelerometerGraph.AddCurve("", pointPl, Color.Red, SymbolType.None);
-                    LineItem myCurve2 = gyroscopeGraph.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
-                    LineItem myCurve3 = magnetometerGraph.AddCurve("", pointPl3, Color.Green, SymbolType.None);
+
+                    LineItem accelerometerCurve = accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
+                    LineItem gyroscopeCurve = gyroscopeGraph.AddCurve("", gyroscopePPL, Color.Blue, SymbolType.None);
+                    LineItem magnetometerCurve = magnetometerGraph.AddCurve("", magnetometerPPL, Color.Green, SymbolType.None);
 
                     zedGraphControl1.AxisChange();
                     zedGraphControl1.Invalidate();
@@ -200,7 +202,7 @@ namespace ProgettoCS
             string stringa;
             while (true)
             {
-                stringa = stringQueue.getNextElement();
+                stringa = logQueue.getNextElement();
 
                 if (stringa != null)
                     try
