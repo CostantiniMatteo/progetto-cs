@@ -22,7 +22,6 @@ namespace ProgettoCS
         GraphPane myPane, myPane2, myPane3;
         private TemplateQueue<string> stringQueue;
         private TemplateQueue<List<List<double>>> valQueue;
-        static int jumpCount = 0;
 
         public Form1()
         {
@@ -130,13 +129,14 @@ namespace ProgettoCS
 
                     pointPl3.Add(x, y);
                     x++;
-                    zedGraphControl1.GraphPane.CurveList.Clear();
-                    zedGraphControl2.GraphPane.CurveList.Clear();
-                    zedGraphControl3.GraphPane.CurveList.Clear();
 
-                    LineItem myCurve = myPane.AddCurve("", pointPl, Color.Red, SymbolType.None);
-                    LineItem myCurve2 = myPane2.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
-                    LineItem myCurve3 = myPane3.AddCurve("Theta", pointPl3, Color.Green, SymbolType.None);
+                    myPane.CurveList.Clear();
+                    myPane2.CurveList.Clear();
+                    myPane3.CurveList.Clear();
+
+                    myPane.AddCurve("", pointPl, Color.Red, SymbolType.None);
+                    myPane2.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
+                    myPane3.AddCurve("Theta", pointPl3, Color.Green, SymbolType.None);
 
                     zedGraphControl1.AxisChange();
                     zedGraphControl1.Invalidate();
