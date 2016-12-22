@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PprogettoCS
+namespace ProgettoCS
 {
     class Listener
     {
@@ -23,6 +23,7 @@ namespace PprogettoCS
 
         public void parser()
         {
+            //La parte di connessione andrebbe messa in un metodo
             List<List<List<double>>> window = new List<List<List<double>>>();
             Int32 port = 45555;
             IPAddress localAddr = IPAddress.Parse("127.0.0.1");
