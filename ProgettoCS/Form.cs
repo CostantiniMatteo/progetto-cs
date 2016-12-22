@@ -112,9 +112,10 @@ namespace ProgettoCS
         public void drawModule()
         {
             List<List<double>> val;
-            PointPairList pointPl = new PointPairList();
-            PointPairList pointPl2 = new PointPairList();
-            PointPairList pointPl3 = new PointPairList();
+            PointPairList accelerometerPPL = new PointPairList();
+            PointPairList gyroscopePPL = new PointPairList();
+            PointPairList magnetometerPPL = new PointPairList();
+
             List<double> modacc = new List<double>();
             List<double> modgyr = new List<double>();
             double x = 0;
@@ -128,23 +129,23 @@ namespace ProgettoCS
                     modacc.Add(modulo(val[0][0], val[0][1], val[0][2]));
                     modgyr.Add(modulo(val[0][3], val[0][4], val[0][5]));
 
-                    pointPl.Add(x, modacc[modacc.Count - 1]);
-                    pointPl2.Add(x, modgyr[modgyr.Count - 1]);
+                    accelerometerPPL.Add(x, modacc[modacc.Count - 1]);
+                    gyroscopePPL.Add(x, modgyr[modgyr.Count - 1]);
 
                     double y = Math.Atan(val[0][7] / val[0][8]);
-                    y = deleteDiscontinuity(pointPl3, y, x);
+                    y = deleteDiscontinuity(magnetometerPPL, y, x);
 
 
-                    pointPl3.Add(x, y);
+                    magnetometerPPL.Add(x, y);
                     x++;
 
                     accelerometerGraph.CurveList.Clear();
                     gyroscopeGraph.CurveList.Clear();
                     magnetometerGraph.CurveList.Clear();
 
-                    accelerometerGraph.AddCurve("", pointPl, Color.Red, SymbolType.None);
-                    gyroscopeGraph.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
-                    magnetometerGraph.AddCurve("Theta", pointPl3, Color.Green, SymbolType.None);
+                    accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
+                    gyroscopeGraph.AddCurve("", gyroscopePPL, Color.Blue, SymbolType.None);
+                    magnetometerGraph.AddCurve("Theta", magnetometerPPL, Color.Green, SymbolType.None);
 
                     zedGraphControl1.AxisChange();
                     zedGraphControl1.Invalidate();

@@ -18,9 +18,9 @@ namespace ProgettoCS
         private TemplateQueue<string> logQueue;
         private TemplateQueue<List<List<double>>> valQueue;
 
-        public Listener(TemplateQueue<List<List<double>>> valQueue, TemplateQueue<string> stringQueue)
+        public Listener(TemplateQueue<List<List<double>>> valQueue, TemplateQueue<string> logQueue)
         {
-            this.logQueue = stringQueue;
+            this.logQueue = logQueue;
             this.valQueue = valQueue;
         }
 
