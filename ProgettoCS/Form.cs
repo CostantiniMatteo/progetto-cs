@@ -15,29 +15,29 @@ using ZedGraph;
 
 namespace ProgettoCS
 {
-    public partial class Form1 : Form
+    public partial class Form : System.Windows.Forms.Form
     {
 
-        private Listener l1;
-        GraphPane myPane, myPane2, myPane3;
+        private Listener listener;
+        GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph;
         private TemplateQueue<string> stringQueue;
         private TemplateQueue<List<List<double>>> valQueue;
 
-        public Form1()
+        public Form()
         {
             InitializeComponent();
-            myPane = zedGraphControl1.GraphPane;
-            myPane2 = zedGraphControl2.GraphPane;
-            myPane3 = zedGraphControl3.GraphPane;
-            myPane.Title.Text = "Accelerometro";
-            myPane2.Title.Text = "Giroscopio";
-            myPane3.Title.Text = "Magnetometro";
-            myPane.XAxis.MajorGrid.IsVisible = true;
-            myPane.YAxis.MajorGrid.IsVisible = true;
-            myPane2.XAxis.MajorGrid.IsVisible = true;
-            myPane2.YAxis.MajorGrid.IsVisible = true;
-            myPane3.XAxis.MajorGrid.IsVisible = true;
-            myPane3.YAxis.MajorGrid.IsVisible = true;
+            accelerometerGraph = zedGraphControl1.GraphPane;
+            gyroscopeGraph = zedGraphControl2.GraphPane;
+            magnetometerGraph = zedGraphControl3.GraphPane;
+            accelerometerGraph.Title.Text = "Accelerometro";
+            gyroscopeGraph.Title.Text = "Giroscopio";
+            magnetometerGraph.Title.Text = "Magnetometro";
+            accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
+            accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
+            gyroscopeGraph.XAxis.MajorGrid.IsVisible = true;
+            gyroscopeGraph.YAxis.MajorGrid.IsVisible = true;
+            magnetometerGraph.XAxis.MajorGrid.IsVisible = true;
+            magnetometerGraph.YAxis.MajorGrid.IsVisible = true;
 
             //myPane.Chart.Fill.Brush = new System.Drawing.SolidBrush(Color.DimGray);
             //Per settare valori massimi e minimi del grafico
@@ -50,10 +50,10 @@ namespace ProgettoCS
             stringQueue = new TemplateQueue<string>();
             valQueue = new TemplateQueue<List<List<double>>>();
 
-            l1 = new Listener(valQueue, stringQueue);
+            listener = new Listener(valQueue, stringQueue);
 
             Thread t1 = new Thread(drawModule);
-            Thread t2 = new Thread(l1.parser);
+            Thread t2 = new Thread(listener.parser);
             Thread t3 = new Thread(stampa);
             t1.Start();
             t2.Start();
@@ -82,9 +82,9 @@ namespace ProgettoCS
                     zedGraphControl1.GraphPane.CurveList.Clear();
                     zedGraphControl2.GraphPane.CurveList.Clear();
                     zedGraphControl3.GraphPane.CurveList.Clear();
-                    LineItem myCurve = myPane.AddCurve("", pointPl, Color.Red, SymbolType.None);
-                    LineItem myCurve2 = myPane2.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
-                    LineItem myCurve3 = myPane3.AddCurve("", pointPl3, Color.Green, SymbolType.None);
+                    LineItem myCurve = accelerometerGraph.AddCurve("", pointPl, Color.Red, SymbolType.None);
+                    LineItem myCurve2 = gyroscopeGraph.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
+                    LineItem myCurve3 = magnetometerGraph.AddCurve("", pointPl3, Color.Green, SymbolType.None);
 
                     zedGraphControl1.AxisChange();
                     zedGraphControl1.Invalidate();
@@ -130,13 +130,13 @@ namespace ProgettoCS
                     pointPl3.Add(x, y);
                     x++;
 
-                    myPane.CurveList.Clear();
-                    myPane2.CurveList.Clear();
-                    myPane3.CurveList.Clear();
+                    accelerometerGraph.CurveList.Clear();
+                    gyroscopeGraph.CurveList.Clear();
+                    magnetometerGraph.CurveList.Clear();
 
-                    myPane.AddCurve("", pointPl, Color.Red, SymbolType.None);
-                    myPane2.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
-                    myPane3.AddCurve("Theta", pointPl3, Color.Green, SymbolType.None);
+                    accelerometerGraph.AddCurve("", pointPl, Color.Red, SymbolType.None);
+                    gyroscopeGraph.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
+                    magnetometerGraph.AddCurve("Theta", pointPl3, Color.Green, SymbolType.None);
 
                     zedGraphControl1.AxisChange();
                     zedGraphControl1.Invalidate();

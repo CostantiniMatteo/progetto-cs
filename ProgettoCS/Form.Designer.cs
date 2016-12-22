@@ -1,6 +1,6 @@
 ﻿namespace ProgettoCS
 {
-    partial class Form1
+    partial class Form
     {
         /// <summary>
         /// Variabile di progettazione necessaria.
