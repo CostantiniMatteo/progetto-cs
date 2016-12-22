@@ -12,6 +12,9 @@ namespace ProgettoCS
 {
     class Listener
     {
+        // logQueue contiene i file di log che verranno stampati
+        // valQueue contiene i pacchetti ricevuti e parsati dal listener
+        // Entrambe le code sono condivise con Form.cs (per ora)
         private TemplateQueue<string> logQueue;
         private TemplateQueue<List<List<double>>> valQueue;
 
