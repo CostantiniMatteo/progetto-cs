@@ -212,7 +212,7 @@ namespace ProgettoCS
                             richTextBox1.Text += logMsg;
                         });
                     }
-                    catch (Exception e) { }
+                    catch (Exception) { }
                 Thread.Sleep(100);
             }
         }

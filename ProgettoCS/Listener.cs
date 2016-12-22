@@ -177,7 +177,7 @@ namespace ProgettoCS
 
                 }
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
                 logQueue.enqueueElement("Finito");
             }
