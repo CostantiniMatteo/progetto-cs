@@ -26,16 +26,21 @@ namespace ProgettoCS
         public Form()
         {
             InitializeComponent();
+
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
             magnetometerGraph = zedGraphControl3.GraphPane;
+
             accelerometerGraph.Title.Text = "Accelerometro";
             gyroscopeGraph.Title.Text = "Giroscopio";
             magnetometerGraph.Title.Text = "Magnetometro";
+
             accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
             accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
+
             gyroscopeGraph.XAxis.MajorGrid.IsVisible = true;
             gyroscopeGraph.YAxis.MajorGrid.IsVisible = true;
+
             magnetometerGraph.XAxis.MajorGrid.IsVisible = true;
             magnetometerGraph.YAxis.MajorGrid.IsVisible = true;
 
@@ -59,6 +64,7 @@ namespace ProgettoCS
             t2.Start();
             t3.Start();
         }
+
 
         public void draw()
         {
@@ -98,8 +104,8 @@ namespace ProgettoCS
                     //zedGraphControl1.Refresh();
                 }
             }
-
         }
+
 
         public void drawModule()
         {
@@ -152,10 +158,12 @@ namespace ProgettoCS
             }
         }
 
+
         private double incremRapp(double y1, double x1, double y2, double x2)
         {
             return (y2 - y1) / (x2 - x1);
         }
+
 
         private double deleteDiscontinuity(PointPairList pointPl3, double y, double x)
         {
@@ -180,11 +188,11 @@ namespace ProgettoCS
             return y;
         }
 
+
         private double modulo(double v1, double v2, double v3)
         {
             return Math.Sqrt(Math.Abs(v1) + Math.Abs(v2) + Math.Abs(v3));
         }
-
 
 
         public void stampa()
@@ -206,5 +214,7 @@ namespace ProgettoCS
                 Thread.Sleep(100);
             }
         }
+
+
     }
 }
