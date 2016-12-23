@@ -166,7 +166,7 @@ namespace ProgettoCS
 
             // Costa: Non mi sono chiari i controlli:
             // Come fa ad essere null l'ultimo valore nella PPL?
-            if (magnetometerPPL.Count > 0 && magnetometerPPL[magnetometerPPL.Count - 1] != null)
+            if (magnetometerPPL.Count > 0 )
             {
                 oldX = magnetometerPPL[magnetometerPPL.Count - 1].X;
                 oldY = magnetometerPPL[magnetometerPPL.Count - 1].Y;
@@ -177,6 +177,18 @@ namespace ProgettoCS
                 // aggiungo o sottraggo PiGreco all'ultimo valore.
                 // Non sono sicuro sulla soglia pari a 3. Credo
                 // Pinardi abbia detto Pi/2 o 1.2.
+
+                // Dario: si esatto è giusto Pi/2 come "limite", ma infatti
+                // la funzione fa lo scalino quando passa da Pi/2 a -Pi/2 
+                // (e viceversa) e quindi fa un salto di Pi. Ho messo 3
+                // semplicemente perchè non sono sempre precisissimi i calcoli
+                // quindi se mettessi 3.14 magari potrei avere uno scalino 
+                // di 3.13 e l'algoritmo non lo beccherebbe.
+
+                // Per Costa: prova ad aprire il file "camm svolta" e guarda
+                // gli scalini che fa, poi sostituisci negli if qui sotto
+                // 2.4 al posto 3 e riapri il file, dovrebbe sistemarli.
+
                 if(incrRapp > 3)
                 {
                     y = y - Math.PI;
