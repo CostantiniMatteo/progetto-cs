@@ -49,6 +49,7 @@ namespace ProgettoCS
         {
             List<List<List<double>>> window = new List<List<List<double>>>();
             BinaryReader bin = ConnectAndGetReader();
+            List<List<double>> valData;
 
             try
             {
@@ -124,7 +125,9 @@ namespace ProgettoCS
 
                     while(true)
                     {
-                        for(int i = 0; i < numSensori; i++)
+                        valData = new List<List<double>>();
+
+                        for (int i = 0; i < numSensori; i++)
                         {
                             byte[] temp = new byte[4];
                             for(int tr = 0; tr < 13; tr++)// 13 campi, 3 * 3 + 4
@@ -150,7 +153,7 @@ namespace ProgettoCS
                         }
 
 
-                        valQueue.EnqueueElement(new Packet(array));
+                        
 
                         for(int x = 0; x < numSensori; x++)
                         {
@@ -159,15 +162,19 @@ namespace ProgettoCS
 
                         for(int j = 0; j < numSensori; j++)
                         {
+                            valData.Add(new List<double>());
+
                             for(int tr = 0; tr < 13; tr++)
                             {
                                 // esempio output su console
                                 logQueue.Enqueue(array[j][tr] + "; " + "\n");
+                                valData[j].Add(array[j][tr]);
                             }
                             logQueue.Enqueue("\n");
                             array[j].RemoveRange(0, 13); // cancellazione dati
                         }
-                        
+
+                        valQueue.EnqueueElement(new Packet(valData));
                         logQueue.Enqueue("\n");
 
                         if(numSensori < 5) // lettura pacchetto seguente

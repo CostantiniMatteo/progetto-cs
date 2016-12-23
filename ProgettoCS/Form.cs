@@ -20,17 +20,19 @@ namespace ProgettoCS
     {
 
         private Listener listener;
-        GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph;
+        GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, pane4;
         private ConcurrentQueue<string> logQueue;
         private PacketQueue valQueue;
 
         public Form()
         {
             InitializeComponent();
+            Resize();
 
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
             magnetometerGraph = zedGraphControl3.GraphPane;
+            pane4 = zedGraphControl4.GraphPane;
 
             accelerometerGraph.Title.Text = "Accelerometro";
             gyroscopeGraph.Title.Text = "Giroscopio";
@@ -44,6 +46,9 @@ namespace ProgettoCS
 
             magnetometerGraph.XAxis.MajorGrid.IsVisible = true;
             magnetometerGraph.YAxis.MajorGrid.IsVisible = true;
+
+            pane4.XAxis.MajorGrid.IsVisible = true;
+            pane4.YAxis.MajorGrid.IsVisible = true;
 
             //myPane.Chart.Fill.Brush = new System.Drawing.SolidBrush(Color.DimGray);
             //Per settare valori massimi e minimi del grafico
@@ -60,17 +65,28 @@ namespace ProgettoCS
 
             Thread t1 = new Thread(DrawModule);
             Thread t2 = new Thread(listener.Parse);
-            Thread t3 = new Thread(Print);
+            //Thread t3 = new Thread(Print);
             t1.Start();
             t2.Start();
-            t3.Start();
+            //t3.Start();
         }
 
+        private void Resize()
+        {
+            this.Location = new Point(0, 0);
+            this.Size = Screen.PrimaryScreen.WorkingArea.Size;
+            tableLayoutPanel1.Size = new Size(this.Width - 250, this.Height - 63);
+            zedGraphControl1.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
+            zedGraphControl2.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
+            zedGraphControl3.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
+            zedGraphControl4.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);       
+
+        }
 
         public void DrawModule()
         {
             // Conterra di volta in volta il pacchetto i-esimo invitato e parsato dal listener.
-            List<List<double>> val;
+            Packet val;
 
             // Le liste che conterranno i punti delle tre curve da disegnare.
             PointPairList accelerometerPPL = new PointPairList();
@@ -90,7 +106,7 @@ namespace ProgettoCS
             while (true)
             {
                 // Provo a leggere dalla coda condivisa un nuovo pacchetto.
-                sval = valQueue.GetNextElement();
+                val = valQueue.GetNextElement();
 
                 if (val != null)
                 {
@@ -102,8 +118,8 @@ namespace ProgettoCS
                     // Viene calcolato il modulo per entrambi e aggiunto
                     // alle due rispettive liste.
 
-                    modAccelerometer.Add(Modulus(val[0][0], val[0][1], val[0][2]));
-                    modGyroscope.Add(Modulus(val[0][3], val[0][4], val[0][5]));
+                    modAccelerometer.Add(Modulus(val.GetAccX(0), val.GetAccY(0), val.GetAccZ(0)));
+                    modGyroscope.Add(Modulus(val.GetGyrX(0), val.GetGyrY(0), val.GetGyrZ(0)));
 
                     // Aggiungo i punti (x, y) appena calcolati
                     accelerometerPPL.Add(x, modAccelerometer[modAccelerometer.Count - 1]);
@@ -115,7 +131,7 @@ namespace ProgettoCS
                     // Come da specifiche si trova l'angolo di girata calcolando
                     // l'arcotg del rapporto tra la proiezione del vettore del
                     // magnetometro sull'asse Y e sull'asse Z.
-                    double girata = Math.Atan(val[0][7] / val[0][8]);
+                    double girata = Math.Atan(val.GetMagY(0) / val.GetMagZ(0));
                     girata = removeDiscontinuity(magnetometerPPL, girata, x);
 
                     magnetometerPPL.Add(x, girata);
@@ -206,11 +222,11 @@ namespace ProgettoCS
                 // gli scalini che fa, poi sostituisci negli if qui sotto
                 // 2.4 al posto 3 e riapri il file, dovrebbe sistemarli.
 
-                if(incrRapp > 3)
+                if(incrRapp > 2.4)
                 {
                     y = y - Math.PI;
 
-                }else if (incrRapp < -3)
+                }else if (incrRapp < -2.4)
                 {
                     y = y + Math.PI;
                 }
@@ -226,7 +242,7 @@ namespace ProgettoCS
         }
 
 
-        public void Print()
+        /*public void Print()
         {
             string logMsg;
             while (true)
@@ -246,7 +262,7 @@ namespace ProgettoCS
             }
 
             
-        }
+        }*/
 
 
     }
