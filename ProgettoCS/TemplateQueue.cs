@@ -23,7 +23,7 @@ namespace ProgettoCS
 
         //Sarà davvero thread safe?
         //Scopri un modo per testare se è vero
-        public T getNextElement()
+        public T GetNextElement()
         {
             T element = default(T);
             bool dequeued = queue.TryDequeue(out element);
@@ -34,7 +34,7 @@ namespace ProgettoCS
         }
 
         //Sarà davvero thread safe?
-        public void enqueueElement(T el)
+        public void EnqueueElement(T el)
         {
             if (el != null)
             {
