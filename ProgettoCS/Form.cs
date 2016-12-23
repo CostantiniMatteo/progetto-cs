@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,8 +21,8 @@ namespace ProgettoCS
 
         private Listener listener;
         GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph;
-        private TemplateQueue<string> logQueue;
-        private TemplateQueue<List<List<double>>> valQueue;
+        private ConcurrentQueue<string> logQueue;
+        private PacketQueue valQueue;
 
         public Form()
         {
@@ -52,8 +53,8 @@ namespace ProgettoCS
             myPane.XAxis.Scale.Max = 1;
             myPane.AxisChange();
             zedGraphControl1.Invalidate();*/
-            logQueue = new TemplateQueue<string>();
-            valQueue = new TemplateQueue<List<List<double>>>();
+            logQueue = new ConcurrentQueue<string>();
+            valQueue = new PacketQueue();
 
             listener = new Listener(valQueue, logQueue);
 
@@ -89,7 +90,7 @@ namespace ProgettoCS
             while (true)
             {
                 // Provo a leggere dalla coda condivisa un nuovo pacchetto.
-                val = valQueue.GetNextElement();
+                sval = valQueue.GetNextElement();
 
                 if (val != null)
                 {
