@@ -115,14 +115,14 @@ namespace ProgettoCS
                     // l'arcotg del rapporto tra la proiezione del vettore del
                     // magnetometro sull'asse Y e sull'asse Z.
                     double girata = Math.Atan(val[0][7] / val[0][8]);
-                    girata = RemoveDiscontinuity(magnetometerPPL, girata, x);
+                    girata = removeDiscontinuity(magnetometerPPL, girata, x);
 
                     magnetometerPPL.Add(x, girata);
 
                     // si passa smoothed e si modifica direttamente quella
                     // oppure si fa ritornare una lista di valori mediati
                     // che si assegna a smoothed
-                    Smoothing(smoothed, magnetometerPPL, range);
+                    smoothing(smoothed, magnetometerPPL, range);
 
                     // Aggiorno il tempo.
                     x++;
@@ -154,7 +154,7 @@ namespace ProgettoCS
             }
         }
 
-        private void Smoothing(PointPairList smoothed, PointPairList magnetometerPPL, int range)
+        private void smoothing(PointPairList smoothed, PointPairList magnetometerPPL, int range)
         {
             if(magnetometerPPL != null && magnetometerPPL.Count >= (range*2 + 1))
             {
@@ -175,7 +175,7 @@ namespace ProgettoCS
 
         // Rimuove la discontinuita', se presente, nell'ultimo valore
         // del magnetometro.
-        private double RemoveDiscontinuity(PointPairList magnetometerPPL, double y, double x)
+        private double removeDiscontinuity(PointPairList magnetometerPPL, double y, double x)
         {
             double oldY, oldX;
             double incrRapp;
@@ -241,7 +241,10 @@ namespace ProgettoCS
                         });
                     }
                     catch (Exception) { }
+                Thread.Sleep(100);
             }
+
+            
         }
 
 
