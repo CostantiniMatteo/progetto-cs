@@ -57,16 +57,16 @@ namespace ProgettoCS
 
             listener = new Listener(valQueue, logQueue);
 
-            Thread t1 = new Thread(drawModule);
-            Thread t2 = new Thread(listener.parser);
-            Thread t3 = new Thread(print);
+            Thread t1 = new Thread(DrawModule);
+            Thread t2 = new Thread(listener.Parse);
+            Thread t3 = new Thread(Print);
             t1.Start();
             t2.Start();
             t3.Start();
         }
 
 
-        public void drawModule()
+        public void DrawModule()
         {
             // Conterra di volta in volta il pacchetto i-esimo invitato e parsato dal listener.
             List<List<double>> val;
@@ -87,7 +87,7 @@ namespace ProgettoCS
             while (true)
             {
                 // Provo a leggere dalla coda condivisa un nuovo pacchetto.
-                val = valQueue.getNextElement();
+                val = valQueue.GetNextElement();
 
                 if (val != null)
                 {
@@ -99,8 +99,8 @@ namespace ProgettoCS
                     // Viene calcolato il modulo per entrambi e aggiunto
                     // alle due rispettive liste.
 
-                    modAccelerometer.Add(modulus(val[0][0], val[0][1], val[0][2]));
-                    modGyroscope.Add(modulus(val[0][3], val[0][4], val[0][5]));
+                    modAccelerometer.Add(Modulus(val[0][0], val[0][1], val[0][2]));
+                    modGyroscope.Add(Modulus(val[0][3], val[0][4], val[0][5]));
 
                     // Aggiungo i punti (x, y) appena calcolati
                     accelerometerPPL.Add(x, modAccelerometer[modAccelerometer.Count - 1]);
@@ -152,7 +152,7 @@ namespace ProgettoCS
         // Per gli amici Rapporto Incrementale.
         // Per ora viene calcolato solo sugli ultimi due punti
         // quindi basterebbero solo i valori delle y.
-        private double differenceQuotient(double y1, double x1, double y2, double x2)
+        private double DifferenceQuotient(double y1, double x1, double y2, double x2)
         {
             return (y2 - y1) / (x2 - x1);
         }
@@ -171,7 +171,7 @@ namespace ProgettoCS
                 oldX = magnetometerPPL[magnetometerPPL.Count - 1].X;
                 oldY = magnetometerPPL[magnetometerPPL.Count - 1].Y;
 
-                incrRapp = differenceQuotient(oldY, oldX, y, x);
+                incrRapp = DifferenceQuotient(oldY, oldX, y, x);
 
                 // Se il rapporto incrementale supera una cerca soglia
                 // aggiungo o sottraggo PiGreco all'ultimo valore.
@@ -191,18 +191,18 @@ namespace ProgettoCS
         }
 
 
-        private double modulus(double v1, double v2, double v3)
+        private double Modulus(double v1, double v2, double v3)
         {
             return Math.Sqrt(Math.Abs(v1) + Math.Abs(v2) + Math.Abs(v3));
         }
 
 
-        public void print()
+        public void Print()
         {
             string logMsg;
             while (true)
             {
-                logMsg = logQueue.getNextElement();
+                logMsg = logQueue.GetNextElement();
 
                 if (logMsg != null)
                     try
