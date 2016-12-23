@@ -43,7 +43,9 @@
             // 
             this.zedGraphControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.zedGraphControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.zedGraphControl1.Location = new System.Drawing.Point(3, 3);
+            this.zedGraphControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.zedGraphControl1.Location = new System.Drawing.Point(2, 2);
+            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.zedGraphControl1.Name = "zedGraphControl1";
             this.zedGraphControl1.ScrollGrace = 0D;
             this.zedGraphControl1.ScrollMaxX = 0D;
@@ -52,7 +54,7 @@
             this.zedGraphControl1.ScrollMinX = 0D;
             this.zedGraphControl1.ScrollMinY = 0D;
             this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(369, 212);
+            this.zedGraphControl1.Size = new System.Drawing.Size(370, 214);
             this.zedGraphControl1.TabIndex = 0;
             // 
             // richTextBox1

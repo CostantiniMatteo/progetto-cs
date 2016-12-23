@@ -34,9 +34,27 @@ namespace ProgettoCS
             magnetometerGraph = zedGraphControl3.GraphPane;
             pane4 = zedGraphControl4.GraphPane;
 
+            accelerometerGraph.YAxis.Title.Text = "m/s²";
+            accelerometerGraph.XAxis.Title.Text = "second";
+
+            gyroscopeGraph.YAxis.Title.Text = "Grade";
+            gyroscopeGraph.XAxis.Title.Text = "second";
+
+            magnetometerGraph.YAxis.Title.Text = "π";
+            magnetometerGraph.XAxis.Title.Text = "second";
+
+            pane4.YAxis.Title.Text = "π";
+            pane4.XAxis.Title.Text = "second";
+
+            accelerometerGraph.IsFontsScaled = false;
+            gyroscopeGraph.IsFontsScaled = false;
+            magnetometerGraph.IsFontsScaled = false;
+            pane4.IsFontsScaled = false;
+
             accelerometerGraph.Title.Text = "Accelerometro";
             gyroscopeGraph.Title.Text = "Giroscopio";
-            magnetometerGraph.Title.Text = "Magnetometro";
+            magnetometerGraph.Title.Text = "Magnetometro senza discontinuità";
+            pane4.Title.Text = "Magnetometro con discontinuità";
 
             accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
             accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
@@ -92,6 +110,7 @@ namespace ProgettoCS
             PointPairList accelerometerPPL = new PointPairList();
             PointPairList gyroscopePPL = new PointPairList();
             PointPairList magnetometerPPL = new PointPairList();
+            PointPairList magnetometerPPLDis = new PointPairList();
             PointPairList smoothed = new PointPairList();
 
             // Le liste che conterranno il modulo applicato rispettivamente
@@ -132,6 +151,7 @@ namespace ProgettoCS
                     // l'arcotg del rapporto tra la proiezione del vettore del
                     // magnetometro sull'asse Y e sull'asse Z.
                     double girata = Math.Atan(val.GetMagY(0) / val.GetMagZ(0));
+                    magnetometerPPLDis.Add(x, girata);
                     girata = removeDiscontinuity(magnetometerPPL, girata, x);
 
                     magnetometerPPL.Add(x, girata);
@@ -142,7 +162,7 @@ namespace ProgettoCS
                     smoothing(smoothed, magnetometerPPL, range);
 
                     // Aggiorno il tempo.
-                    x++;
+                    x = x + 0.02;
 
                     // Aggiorno le curve da disegnare.
                     // DOMANDA: Non c'e' un modo per evitare di fare Clear() e
@@ -150,10 +170,12 @@ namespace ProgettoCS
                     accelerometerGraph.CurveList.Clear();
                     gyroscopeGraph.CurveList.Clear();
                     magnetometerGraph.CurveList.Clear();
+                    pane4.CurveList.Clear();
 
                     accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
                     gyroscopeGraph.AddCurve("", gyroscopePPL, Color.Blue, SymbolType.None);
                     magnetometerGraph.AddCurve("Theta", magnetometerPPL, Color.Green, SymbolType.None);
+                    pane4.AddCurve("Theta", magnetometerPPLDis, Color.DeepPink, SymbolType.None);
 
                     // Costa: Non so cosa fanno. Dovrai spiegarmele Dario.
                     zedGraphControl1.AxisChange();
@@ -164,6 +186,9 @@ namespace ProgettoCS
 
                     zedGraphControl3.AxisChange();
                     zedGraphControl3.Invalidate();
+
+                    zedGraphControl4.AxisChange();
+                    zedGraphControl4.Invalidate();
 
                     // Costa: Non so cosa fa neanche questa.
                     //zedGraphControl1.Refresh();
@@ -222,11 +247,14 @@ namespace ProgettoCS
                 // gli scalini che fa, poi sostituisci negli if qui sotto
                 // 2.4 al posto 3 e riapri il file, dovrebbe sistemarli.
 
-                if(incrRapp > 2.4)
+                // ho messo le x reali, quindi ogni x si incrementa di 0,02
+                // quindi rapporto diventa 2,4/0,02
+
+                if(incrRapp > 120)
                 {
                     y = y - Math.PI;
 
-                }else if (incrRapp < -2.4)
+                }else if (incrRapp < -120)
                 {
                     y = y + Math.PI;
                 }
