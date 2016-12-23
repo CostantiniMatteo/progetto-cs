@@ -24,7 +24,7 @@ namespace ProgettoCS {
             this.valQueue = valQueue;
         }
 
-        public BinaryReader Connect() {
+        public BinaryReader ConnectAndGetReader() {
             IPAddress localAddr = IPAddress.Parse("127.0.0.1");
             TcpListener server = new TcpListener(localAddr, port);
 
@@ -42,7 +42,7 @@ namespace ProgettoCS {
 
         public void Parse() {
             List<List<List<double>>> window = new List<List<List<double>>>();
-            BinaryReader bin = Connect();
+            BinaryReader bin = ConnectAndGetReader();
 
             try {
                 while(true) {
