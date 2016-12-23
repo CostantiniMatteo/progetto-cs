@@ -75,14 +75,16 @@ namespace ProgettoCS
             PointPairList accelerometerPPL = new PointPairList();
             PointPairList gyroscopePPL = new PointPairList();
             PointPairList magnetometerPPL = new PointPairList();
+            PointPairList smoothed = new PointPairList();
 
             // Le liste che conterranno il modulo applicato rispettivamente
             // ai deti dell'accelerometro e del giroscopio.
             List<double> modAccelerometer = new List<double>();
             List<double> modGyroscope = new List<double>();
-
+            
             // Il valore dell'asse X dei grafici (Espresso in unita' di tempo?).
             double x = 0;
+            int range = 10;
 
             while (true)
             {
@@ -117,6 +119,11 @@ namespace ProgettoCS
 
                     magnetometerPPL.Add(x, girata);
 
+                    // si passa smoothed e si modifica direttamente quella
+                    // oppure si fa ritornare una lista di valori mediati
+                    // che si assegna a smoothed
+                    smoothing(smoothed, magnetometerPPL, range);
+
                     // Aggiorno il tempo.
                     x++;
 
@@ -145,6 +152,15 @@ namespace ProgettoCS
                     //zedGraphControl1.Refresh();
                 }
             }
+        }
+
+        private void smoothing(PointPairList smoothed, PointPairList magnetometerPPL, int range)
+        {
+            if(magnetometerPPL != null && magnetometerPPL.Count >= (range*2 + 1))
+            {
+                
+            }
+
         }
 
 
