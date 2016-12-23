@@ -20,7 +20,7 @@ namespace ProgettoCS
 
         private Listener listener;
         GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph;
-        private TemplateQueue<string> stringQueue;
+        private TemplateQueue<string> logQueue;
         private TemplateQueue<List<List<double>>> valQueue;
 
         public Form()
@@ -52,98 +52,86 @@ namespace ProgettoCS
             myPane.XAxis.Scale.Max = 1;
             myPane.AxisChange();
             zedGraphControl1.Invalidate();*/
-            stringQueue = new TemplateQueue<string>();
+            logQueue = new TemplateQueue<string>();
             valQueue = new TemplateQueue<List<List<double>>>();
 
-            listener = new Listener(valQueue, stringQueue);
+            listener = new Listener(valQueue, logQueue);
 
             Thread t1 = new Thread(drawModule);
             Thread t2 = new Thread(listener.parser);
-            Thread t3 = new Thread(stampa);
+            Thread t3 = new Thread(print);
             t1.Start();
             t2.Start();
             t3.Start();
         }
 
 
-        public void draw()
-        {
-            List<List<double>> val;
-            PointPairList pointPl = new PointPairList();
-            PointPairList pointPl2 = new PointPairList();
-            PointPairList pointPl3 = new PointPairList();
-
-            while (true)
-            {
-                val = valQueue.getNextElement();
-                if (val != null)
-                {
-                    int size = val.Count();
-                    for (int i = 1; i < size; i++)
-                    {
-                        pointPl.Add(val[i][0], val[i][1]);
-                        pointPl2.Add(val[i][3], val[i][4]);
-                        pointPl3.Add(val[i][6], val[i][7]);
-                    }
-                    zedGraphControl1.GraphPane.CurveList.Clear();
-                    zedGraphControl2.GraphPane.CurveList.Clear();
-                    zedGraphControl3.GraphPane.CurveList.Clear();
-                    LineItem myCurve = accelerometerGraph.AddCurve("", pointPl, Color.Red, SymbolType.None);
-                    LineItem myCurve2 = gyroscopeGraph.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
-                    LineItem myCurve3 = magnetometerGraph.AddCurve("", pointPl3, Color.Green, SymbolType.None);
-
-                    zedGraphControl1.AxisChange();
-                    zedGraphControl1.Invalidate();
-
-                    zedGraphControl2.AxisChange();
-                    zedGraphControl2.Invalidate();
-
-                    zedGraphControl3.AxisChange();
-                    zedGraphControl3.Invalidate();
-
-                    //zedGraphControl1.Refresh();
-                }
-            }
-        }
-
-
         public void drawModule()
         {
+            // Conterra di volta in volta il pacchetto i-esimo invitato e parsato dal listener.
             List<List<double>> val;
-            PointPairList pointPl = new PointPairList();
-            PointPairList pointPl2 = new PointPairList();
-            PointPairList pointPl3 = new PointPairList();
-            List<double> modacc = new List<double>();
-            List<double> modgyr = new List<double>();
+
+            // Le liste che conterranno i punti delle tre curve da disegnare.
+            PointPairList accelerometerPPL = new PointPairList();
+            PointPairList gyroscopePPL = new PointPairList();
+            PointPairList magnetometerPPL = new PointPairList();
+
+            // Le liste che conterranno il modulo applicato rispettivamente
+            // ai deti dell'accelerometro e del giroscopio.
+            List<double> modAccelerometer = new List<double>();
+            List<double> modGyroscope = new List<double>();
+
+            // Il valore dell'asse X dei grafici (Espresso in unita' di tempo?).
             double x = 0;
 
             while (true)
             {
+                // Provo a leggere dalla coda condivisa un nuovo pacchetto.
                 val = valQueue.getNextElement();
+
                 if (val != null)
                 {
 
-                    modacc.Add(modulo(val[0][0], val[0][1], val[0][2]));
-                    modgyr.Add(modulo(val[0][3], val[0][4], val[0][5]));
+                    // Per ora ci interessano solo i dati del primo sensore
+                    // quindi si accede sempre ad indici nella forma [0][i].
+                    // Come da formato i primi tre valori sono relativi
+                    // all'accelerometro. I tre successivi al giroscopio.
+                    // Viene calcolato il modulo per entrambi e aggiunto
+                    // alle due rispettive liste.
 
-                    pointPl.Add(x, modacc[modacc.Count - 1]);
-                    pointPl2.Add(x, modgyr[modgyr.Count - 1]);
+                    modAccelerometer.Add(modulus(val[0][0], val[0][1], val[0][2]));
+                    modGyroscope.Add(modulus(val[0][3], val[0][4], val[0][5]));
 
-                    double y = Math.Atan(val[0][7] / val[0][8]);
-                    y = deleteDiscontinuity(pointPl3, y, x);
+                    // Aggiungo i punti (x, y) appena calcolati
+                    accelerometerPPL.Add(x, modAccelerometer[modAccelerometer.Count - 1]);
+                    gyroscopePPL.Add(x, modGyroscope[modGyroscope.Count - 1]);
 
+                    // CALCOLO DELLA GIRATA
+                    // Per il magnetometro mi interessano solo gli assi Y e Z
+                    // che sono rispettivamente in posizione 7 e 8 nel pacchetto
+                    // Come da specifiche si trova l'angolo di girata calcolando
+                    // l'arcotg del rapporto tra la proiezione del vettore del
+                    // magnetometro sull'asse Y e sull'asse Z.
+                    double girata = Math.Atan(val[0][7] / val[0][8]);
+                    girata = removeDiscontinuity(magnetometerPPL, girata, x);
 
-                    pointPl3.Add(x, y);
+                    magnetometerPPL.Add(x, girata);
+
+                    // Aggiorno il tempo.
                     x++;
 
+                    // Aggiorno le curve da disegnare.
+                    // DOMANDA: Non c'e' un modo per evitare di fare Clear() e
+                    // AddCurve() ogni volta?
                     accelerometerGraph.CurveList.Clear();
                     gyroscopeGraph.CurveList.Clear();
                     magnetometerGraph.CurveList.Clear();
 
-                    accelerometerGraph.AddCurve("", pointPl, Color.Red, SymbolType.None);
-                    gyroscopeGraph.AddCurve("", pointPl2, Color.Blue, SymbolType.None);
-                    magnetometerGraph.AddCurve("Theta", pointPl3, Color.Green, SymbolType.None);
+                    accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
+                    gyroscopeGraph.AddCurve("", gyroscopePPL, Color.Blue, SymbolType.None);
+                    magnetometerGraph.AddCurve("Theta", magnetometerPPL, Color.Green, SymbolType.None);
 
+                    // Costa: Non so cosa fanno. Dovrai spiegarmele Dario.
                     zedGraphControl1.AxisChange();
                     zedGraphControl1.Invalidate();
 
@@ -153,29 +141,42 @@ namespace ProgettoCS
                     zedGraphControl3.AxisChange();
                     zedGraphControl3.Invalidate();
 
+                    // Costa: Non so cosa fa neanche questa.
                     //zedGraphControl1.Refresh();
                 }
             }
         }
 
 
-        private double incremRapp(double y1, double x1, double y2, double x2)
+
+        // Per gli amici Rapporto Incrementale.
+        // Per ora viene calcolato solo sugli ultimi due punti
+        // quindi basterebbero solo i valori delle y.
+        private double differenceQuotient(double y1, double x1, double y2, double x2)
         {
             return (y2 - y1) / (x2 - x1);
         }
 
-
-        private double deleteDiscontinuity(PointPairList pointPl3, double y, double x)
+        // Rimuove la discontinuita', se presente, nell'ultimo valore
+        // del magnetometro.
+        private double removeDiscontinuity(PointPairList magnetometerPPL, double y, double x)
         {
             double oldY, oldX;
             double incrRapp;
-            if (pointPl3.Count > 0 && pointPl3[pointPl3.Count - 1] != null)
+
+            // Costa: Non mi sono chiari i controlli:
+            // Come fa ad essere null l'ultimo valore nella PPL?
+            if (magnetometerPPL.Count > 0 && magnetometerPPL[magnetometerPPL.Count - 1] != null)
             {
-                oldX = pointPl3[pointPl3.Count - 1].X;
-                oldY = pointPl3[pointPl3.Count - 1].Y;
+                oldX = magnetometerPPL[magnetometerPPL.Count - 1].X;
+                oldY = magnetometerPPL[magnetometerPPL.Count - 1].Y;
 
-                incrRapp = incremRapp(oldY, oldX, y, x);
+                incrRapp = differenceQuotient(oldY, oldX, y, x);
 
+                // Se il rapporto incrementale supera una cerca soglia
+                // aggiungo o sottraggo PiGreco all'ultimo valore.
+                // Non sono sicuro sulla soglia pari a 3. Credo
+                // Pinardi abbia detto Pi/2 o 1.2.
                 if(incrRapp > 3)
                 {
                     y = y - Math.PI;
@@ -185,32 +186,33 @@ namespace ProgettoCS
                     y = y + Math.PI;
                 }
             }
+
             return y;
         }
 
 
-        private double modulo(double v1, double v2, double v3)
+        private double modulus(double v1, double v2, double v3)
         {
             return Math.Sqrt(Math.Abs(v1) + Math.Abs(v2) + Math.Abs(v3));
         }
 
 
-        public void stampa()
+        public void print()
         {
-            string stringa;
+            string logMsg;
             while (true)
             {
-                stringa = stringQueue.getNextElement();
+                logMsg = logQueue.getNextElement();
 
-                if (stringa != null)
+                if (logMsg != null)
                     try
                     {
                         this.Invoke((MethodInvoker)delegate ()
                         {
-                            richTextBox1.Text += stringa;
+                            richTextBox1.Text += logMsg;
                         });
                     }
-                    catch (Exception e) { }
+                    catch (Exception) { }
                 Thread.Sleep(100);
             }
         }

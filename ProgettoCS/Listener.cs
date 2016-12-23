@@ -12,12 +12,15 @@ namespace ProgettoCS
 {
     class Listener
     {
-        private TemplateQueue<string> stringQueue;
+        // logQueue contiene i file di log che verranno stampati.
+        // valQueue contiene i pacchetti ricevuti e parsati dal listener.
+        // Entrambe le code sono condivise con Form.cs (per ora).
+        private TemplateQueue<string> logQueue;
         private TemplateQueue<List<List<double>>> valQueue;
 
-        public Listener(TemplateQueue<List<List<double>>> valQueue, TemplateQueue<string> stringQueue)
+        public Listener(TemplateQueue<List<List<double>>> valQueue, TemplateQueue<string> logQueue)
         {
-            this.stringQueue = stringQueue;
+            this.logQueue = logQueue;
             this.valQueue = valQueue;
         }
 
@@ -30,11 +33,11 @@ namespace ProgettoCS
 
             TcpListener server = new TcpListener(localAddr, port);
             server.Start();
-            stringQueue.enqueueElement("Waiting for a connection... \n");
+            logQueue.enqueueElement("Waiting for a connection... \n");
 
             TcpClient client = server.AcceptTcpClient();
 
-            stringQueue.enqueueElement("Connected!\n");
+            logQueue.enqueueElement("Connected!\n");
             try
             {
                 while (true)
@@ -153,14 +156,14 @@ namespace ProgettoCS
                             for (int tr = 0; tr < 13; tr++)
                             {
                                 // esempio output su console
-                                stringQueue.enqueueElement(array[j][tr] + "; " + "\n");
+                                logQueue.enqueueElement(array[j][tr] + "; " + "\n");
                                 valLista[j].Add(array[j][tr]);
                             }
-                            stringQueue.enqueueElement("\n");
+                            logQueue.enqueueElement("\n");
                             array[j].RemoveRange(0, 13); // cancellazione dati
                         }
                         valQueue.enqueueElement(valLista);
-                        stringQueue.enqueueElement("\n");
+                        logQueue.enqueueElement("\n");
 
                         if (numSensori < 5) // lettura pacchetto seguente
                         {
@@ -174,9 +177,9 @@ namespace ProgettoCS
 
                 }
             }
-            catch (IndexOutOfRangeException e)
+            catch (IndexOutOfRangeException)
             {
-                stringQueue.enqueueElement("Finito");
+                logQueue.enqueueElement("Finito");
             }
         }
     }
