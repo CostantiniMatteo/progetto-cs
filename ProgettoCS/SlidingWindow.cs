@@ -88,7 +88,7 @@ namespace ProgettoCS
         public void Add(double v)
         {
             if(Count >= size)
-                throw new InvalidOperationException("Window is full. +
+                throw new InvalidOperationException("Window is full." +
                     "Update the window with UpdateWindow() before adding new elements");
 
             window[end] = v;
