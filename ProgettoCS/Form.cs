@@ -89,7 +89,9 @@ namespace ProgettoCS
             //t3.Start();
         }
 
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         private void Resize()
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         {
             this.Location = new Point(0, 0);
             this.Size = Screen.PrimaryScreen.WorkingArea.Size;

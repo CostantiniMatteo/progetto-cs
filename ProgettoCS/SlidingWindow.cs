@@ -49,38 +49,56 @@ using System.Threading.Tasks;
 
 namespace ProgettoCS
 {
-    class SlidingWindow
+    public class SlidingWindow
     {
         public const int size = 500;
-        private double[] window = new double[size];
+
+        // L'array e' di dimensione size+1 perche' altrimenti
+        // non si riuscirebbe a distinguere il caso in cui
+        // la finestra e' piena dal caso in cui la finestra e'
+        // vuota. In questo mondo invece la lista e' vuota quando
+        // end == start, mentre e' piena quando end == start - 1.
+        private double[] window = new double[size+1];
         private int start;
         private int end;
 
-        protected SlidingWindow()
+        public SlidingWindow()
         {
             start = 0;
             end = 0;
         }
 
+        // L'operazione modulo puo' restituire valori negativi.
+        // Prima di restituire il valore controllo quindi che sia
+        // positivo. In caso contrario sommo 501, per portarmi
+        // al valore equivalente positivo.
         public int Count
         {
-            get { return (end - start) % size; }
+            get
+            {
+                int r = (end - start) % (size + 1);
+                // Controlol che il risultato ottentuto prima sia positivo.
+                // Se cosi' non fosse, per trovare il rappresentante positivo,
+                // aggiungo 501.
+                r = r < 0 ? r + (size + 1) : r;
+                return r;
+            }
         }
 
         public void Add(double v)
         {
             window[end] = v;
-            end = (end + 1) % size;
+            end = (end + 1) % (size+1);
         }
 
         public double Get(int index)
         {
-            return window[(start + index) % size];
+            return window[(start + index) % (size+1)];
         }
 
         public void UpdateWindow()
         {
-            start = (start + size / 2) % size;
+            start = (start + size / 2) % (size+1);
         }
 
 
