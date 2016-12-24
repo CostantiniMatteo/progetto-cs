@@ -87,12 +87,19 @@ namespace ProgettoCS
 
         public void Add(double v)
         {
+            if(Count >= size)
+                throw new InvalidOperationException("Window is full. +
+                    "Update the window with UpdateWindow() before adding new elements");
+
             window[end] = v;
             end = (end + 1) % (size+1);
         }
 
         public double Get(int index)
         {
+            if(index < 0 || index >= Count)
+                throw new IndexOutOfRangeException("Tried to access position " + index + ". Count = " + Count);
+
             return window[(start + index) % (size+1)];
         }
 
