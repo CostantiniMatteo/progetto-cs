@@ -8,14 +8,14 @@ namespace TestProgettoCS
     public class SlidingWindowTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void SWTest()
         {
             var s = new SlidingWindow();
 
             for(var i = 0; i < 500; i++)
                 s.Add(i);
 
-            Assert.AreEqual(500, s.Count, "" + s.Count);
+            Assert.AreEqual(500, s.Count, s.Count.ToString());
 
             s.UpdateWindow();
 

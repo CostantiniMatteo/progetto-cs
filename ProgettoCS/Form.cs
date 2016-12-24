@@ -20,7 +20,7 @@ namespace ProgettoCS
     {
 
         private Listener listener;
-        GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, pane4;
+        GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, magnetometerDiscGraph;
         private ConcurrentQueue<string> logQueue;
         private PacketQueue valQueue;
 
@@ -32,7 +32,7 @@ namespace ProgettoCS
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
             magnetometerGraph = zedGraphControl3.GraphPane;
-            pane4 = zedGraphControl4.GraphPane;
+            magnetometerDiscGraph = zedGraphControl4.GraphPane;
 
             accelerometerGraph.YAxis.Title.Text = "m/s²";
             accelerometerGraph.XAxis.Title.Text = "second";
@@ -43,18 +43,18 @@ namespace ProgettoCS
             magnetometerGraph.YAxis.Title.Text = "π";
             magnetometerGraph.XAxis.Title.Text = "second";
 
-            pane4.YAxis.Title.Text = "π";
-            pane4.XAxis.Title.Text = "second";
+            magnetometerDiscGraph.YAxis.Title.Text = "π";
+            magnetometerDiscGraph.XAxis.Title.Text = "second";
 
             accelerometerGraph.IsFontsScaled = false;
             gyroscopeGraph.IsFontsScaled = false;
             magnetometerGraph.IsFontsScaled = false;
-            pane4.IsFontsScaled = false;
+            magnetometerDiscGraph.IsFontsScaled = false;
 
             accelerometerGraph.Title.Text = "Accelerometro";
             gyroscopeGraph.Title.Text = "Giroscopio";
             magnetometerGraph.Title.Text = "Magnetometro senza discontinuità";
-            pane4.Title.Text = "Magnetometro con discontinuità";
+            magnetometerDiscGraph.Title.Text = "Magnetometro con discontinuità";
 
             accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
             accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
@@ -65,8 +65,8 @@ namespace ProgettoCS
             magnetometerGraph.XAxis.MajorGrid.IsVisible = true;
             magnetometerGraph.YAxis.MajorGrid.IsVisible = true;
 
-            pane4.XAxis.MajorGrid.IsVisible = true;
-            pane4.YAxis.MajorGrid.IsVisible = true;
+            magnetometerDiscGraph.XAxis.MajorGrid.IsVisible = true;
+            magnetometerDiscGraph.YAxis.MajorGrid.IsVisible = true;
 
             //myPane.Chart.Fill.Brush = new System.Drawing.SolidBrush(Color.DimGray);
             //Per settare valori massimi e minimi del grafico
@@ -109,18 +109,18 @@ namespace ProgettoCS
             Packet val;
 
             // Le liste che conterranno i punti delle tre curve da disegnare.
-            PointPairList accelerometerPPL = new PointPairList();
-            PointPairList gyroscopePPL = new PointPairList();
-            PointPairList magnetometerPPL = new PointPairList();
-            PointPairList magnetometerPPLDis = new PointPairList();
-            PointPairList smoothed = new PointPairList();
+            var accelerometerPPL = new PointPairList();
+            var gyroscopePPL = new PointPairList();
+            var magnetometerPPL = new PointPairList();
+            var magnetometerDiscPPL = new PointPairList();
+            var smoothed = new PointPairList();
 
             // Le liste che conterranno il modulo applicato rispettivamente
             // ai deti dell'accelerometro e del giroscopio.
-            List<double> modAccelerometer = new List<double>();
-            List<double> modGyroscope = new List<double>();
+            var modAccelerometer = new List<double>();
+            var modGyroscope = new List<double>();
             
-            // Il valore dell'asse X dei grafici (Espresso in unita' di tempo?).
+            // Il valore dell'asse X dei grafici.
             double x = 0;
             int range = 10;
 
@@ -153,8 +153,8 @@ namespace ProgettoCS
                     // l'arcotg del rapporto tra la proiezione del vettore del
                     // magnetometro sull'asse Y e sull'asse Z.
                     double girata = Math.Atan(val.GetMagY(0) / val.GetMagZ(0));
-                    magnetometerPPLDis.Add(x, girata);
-                    girata = removeDiscontinuity(magnetometerPPL, girata, x);
+                    magnetometerDiscPPL.Add(x, girata);
+                    girata = RemoveDiscontinuity(magnetometerPPL, girata, x);
 
                     magnetometerPPL.Add(x, girata);
 
@@ -172,12 +172,12 @@ namespace ProgettoCS
                     accelerometerGraph.CurveList.Clear();
                     gyroscopeGraph.CurveList.Clear();
                     magnetometerGraph.CurveList.Clear();
-                    pane4.CurveList.Clear();
+                    magnetometerDiscGraph.CurveList.Clear();
 
                     accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
                     gyroscopeGraph.AddCurve("", gyroscopePPL, Color.Blue, SymbolType.None);
                     magnetometerGraph.AddCurve("Theta", magnetometerPPL, Color.Green, SymbolType.None);
-                    pane4.AddCurve("Theta", magnetometerPPLDis, Color.DeepPink, SymbolType.None);
+                    magnetometerDiscGraph.AddCurve("Theta", magnetometerDiscPPL, Color.DeepPink, SymbolType.None);
 
                     // Costa: Non so cosa fanno. Dovrai spiegarmele Dario.
                     zedGraphControl1.AxisChange();
@@ -219,7 +219,7 @@ namespace ProgettoCS
 
         // Rimuove la discontinuita', se presente, nell'ultimo valore
         // del magnetometro.
-        private double removeDiscontinuity(PointPairList magnetometerPPL, double y, double x)
+        private double RemoveDiscontinuity(PointPairList magnetometerPPL, double y, double x)
         {
             double oldY, oldX;
             double incrRapp;
