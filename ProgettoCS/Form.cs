@@ -23,11 +23,13 @@ namespace ProgettoCS
         GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, magnetometerDiscGraph;
         private ConcurrentQueue<string> logQueue;
         private PacketQueue valQueue;
+        private IEnumerable<Control> c;
 
         public Form()
         {
             InitializeComponent();
             Resize();
+            c = GetAll(this, typeof(ZedGraphControl));
 
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
@@ -191,7 +193,7 @@ namespace ProgettoCS
 
                     zedGraphControl4.AxisChange();
                     zedGraphControl4.Invalidate();
-
+                    
                     // Costa: Non so cosa fa neanche questa.
                     //zedGraphControl1.Refresh();
                 }
@@ -206,7 +208,6 @@ namespace ProgettoCS
             }
 
         }
-
 
 
         // Per gli amici Rapporto Incrementale.
@@ -294,6 +295,77 @@ namespace ProgettoCS
             
         }*/
 
+        //EVENTI
 
+        private void Form_Load(object sender, EventArgs e)
+        {
+            c = c.OrderBy(ZedGraphControl => ZedGraphControl.Name);
+            comboBox1.DisplayMember = "Name";
+
+            for (int i = 0; i < c.Count(); i++)
+            {
+                comboBox1.Items.Add(c.ElementAt(i));
+            }
+
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox1.Enabled = true;
+            textBox2.Enabled = true;
+            textBox3.Enabled = true;
+            textBox4.Enabled = true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "")
+            {
+                double minX = Convert.ToDouble(textBox1.Text);
+                double maxX = Convert.ToDouble(textBox2.Text);
+                double minY = Convert.ToDouble(textBox3.Text);
+                double maxY = Convert.ToDouble(textBox4.Text);
+
+                if (minX < maxX || minY < maxY)
+                {
+                    for (int i = 0; i < c.Count(); i++)
+                    {
+                        ZedGraphControl zed = (ZedGraphControl)comboBox1.SelectedItem;
+
+                        GraphPane myPane = zed.GraphPane;
+                        myPane.XAxis.Scale.Min = minX;
+                        myPane.XAxis.Scale.Max = maxX;
+                        myPane.YAxis.Scale.Min = minY;
+                        myPane.YAxis.Scale.Max = maxY;
+
+                        myPane.AxisChange();
+                        zed.Invalidate();
+
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid numbers");
+                }
+            }
+        }
+
+        private void textBox_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "[^0-9]"))
+            {
+                ((TextBox)sender).Text = "";
+                MessageBox.Show("Please enter only numbers."); 
+            }
+        }
+
+        public IEnumerable<Control> GetAll(Control control, Type type)
+        {
+            var controls = control.Controls.Cast<Control>();
+
+            return controls.SelectMany(ctrl => GetAll(ctrl, type))
+                                      .Concat(controls)
+                                      .Where(c => c.GetType() == type);
+        }
     }
 }
