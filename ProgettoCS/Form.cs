@@ -269,7 +269,7 @@ namespace ProgettoCS
 
         private double Modulus(double v1, double v2, double v3)
         {
-            return Math.Sqrt(Math.Abs(v1) + Math.Abs(v2) + Math.Abs(v3));
+            return Math.Sqrt(v1*v1 + v2*v2 + v3*v3);
         }
 
 
