@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace ProgettoCS
 {
-    class Packet
+    public class Packet
     {
         private List<List<double>> data;
+
+        public double this[int sensor, int axis]
+        {
+            get { return data[sensor][axis]; }
+        }
 
         public Packet(List<List<double>> data)
         {

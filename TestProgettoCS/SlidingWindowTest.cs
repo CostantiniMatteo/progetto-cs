@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProgettoCS;
 
@@ -11,7 +12,7 @@ namespace TestProgettoCS
         public void SWTest()
         {
             var s = new SlidingWindow();
-
+/*
             for(var i = 0; i < 500; i++)
                 s.Add(i);
 
@@ -30,6 +31,31 @@ namespace TestProgettoCS
                 s.Add(i);
 
             Assert.AreEqual(500, s.Count);
+*/
         }
+
+        [TestMethod]
+        public void PacketTest()
+        {
+            double[,] d = new double[3,3];
+            for(var i = 0; i < 3; i++)
+                for(var j = 0; j < 3; j++)
+                    d[i,j] = i + j;
+
+            var tmp = new List<List<double>>();
+
+            for(int i = 0; i < 3; i ++)
+            {
+                tmp.Add(new List<double>());
+                for(int j = 0; j < 3; j++)
+                    tmp[i].Add(d[i,j]);
+            }
+
+            Packet p = new Packet(tmp);
+
+
+            Console.WriteLine("cacca");
+        }
+
     }
 }

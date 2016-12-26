@@ -204,7 +204,7 @@ namespace ProgettoCS
         {
             if(magnetometerPPL != null && magnetometerPPL.Count >= (range*2 + 1))
             {
-                
+               
             }
 
         }
