@@ -14,12 +14,22 @@ namespace ProgettoCS
 
             var smoothed = new double[data.Length];
 
+            for(var i = 0; i < range; i++)
+            {
+                smoothed[i] = data[i];
+            }
+
             for(var i = range; i < data.Length - range; i++)
             {
                 smoothed[i] = Mean(data, i - range, i + range);
             }
 
-            return null;
+            for (var i = data.Length - range; i < data.Length; i++)
+            {
+                smoothed[i] = data[i];
+            }
+
+            return smoothed;
         }
 
 

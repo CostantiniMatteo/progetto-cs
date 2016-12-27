@@ -19,13 +19,11 @@ namespace ProgettoCS
     public partial class Form : System.Windows.Forms.Form
     {
 
-        private Listener listener;
-        GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, magnetometerDiscGraph;
-        private ConcurrentQueue<string> logQueue;
-        private PacketQueue valQueue;
+        private GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, magnetometerDiscGraph;
+        private PointsQueue pointsQueue;
         private IEnumerable<Control> c;
 
-        public Form()
+        public Form(PointsQueue pq)
         {
             InitializeComponent();
             Resize();
@@ -70,25 +68,8 @@ namespace ProgettoCS
             magnetometerDiscGraph.XAxis.MajorGrid.IsVisible = true;
             magnetometerDiscGraph.YAxis.MajorGrid.IsVisible = true;
 
-            //myPane.Chart.Fill.Brush = new System.Drawing.SolidBrush(Color.DimGray);
-            //Per settare valori massimi e minimi del grafico
-            /*myPane.YAxis.Scale.Min = -1;
-            myPane.YAxis.Scale.Max = 1;
-            myPane.XAxis.Scale.Min = -1;
-            myPane.XAxis.Scale.Max = 1;
-            myPane.AxisChange();
-            zedGraphControl1.Invalidate();*/
-            logQueue = new ConcurrentQueue<string>();
-            valQueue = new PacketQueue();
 
-            listener = new Listener(valQueue, logQueue);
-
-            Thread t1 = new Thread(DrawModule);
-            Thread t2 = new Thread(listener.Parse);
-            //Thread t3 = new Thread(Print);
-            t1.Start();
-            t2.Start();
-            //t3.Start();
+            this.pointsQueue = pq;
         }
 
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
@@ -105,8 +86,44 @@ namespace ProgettoCS
 
         }
 
+        public void Draw()
+        {
+            var accelerometerPPL = new PointPairList();
+            double x = 0;
+            while (true)
+            {
+                double[] points = pointsQueue.GetNextElement();
+
+                if(points != null)
+                {
+                    /*accelerometerPPL.Add(x, points[0]);
+                    accelerometerGraph.CurveList.Clear();
+                    accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
+                    zedGraphControl1.AxisChange();
+                    zedGraphControl1.Invalidate();
+                    x += 0.02;*/
+                    foreach(double d in points)
+                    {
+                        accelerometerPPL.Add(x, points[0]);
+                        accelerometerGraph.CurveList.Clear();
+                        accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
+                        zedGraphControl1.AxisChange();
+                        zedGraphControl1.Invalidate();
+                        x += 0.02;
+                        Thread.Sleep(20);
+                    }
+
+                }
+            }
+        }
+
+
+
+        /*
         public void DrawModule()
         {
+       
+            
             // Conterra di volta in volta il pacchetto i-esimo invitato e parsato dal listener.
             Packet val;
 
@@ -200,24 +217,9 @@ namespace ProgettoCS
             }
         }
 
-        private void smoothing(PointPairList smoothed, PointPairList magnetometerPPL, int range)
-        {
-            if(magnetometerPPL != null && magnetometerPPL.Count >= (range*2 + 1))
-            {
-               
-            }
+        */
 
-        }
-
-
-        // Per gli amici Rapporto Incrementale.
-        // Per ora viene calcolato solo sugli ultimi due punti
-        // quindi basterebbero solo i valori delle y.
-        private double DifferenceQuotient(double y1, double x1, double y2, double x2)
-        {
-            return (y2 - y1) / (x2 - x1);
-        }
-
+        /*
         // Rimuove la discontinuita', se presente, nell'ultimo valore
         // del magnetometro.
         private double RemoveDiscontinuity(PointPairList magnetometerPPL, double y, double x)
@@ -265,13 +267,7 @@ namespace ProgettoCS
 
             return y;
         }
-
-
-        private double Modulus(double v1, double v2, double v3)
-        {
-            return Math.Sqrt(v1*v1 + v2*v2 + v3*v3);
-        }
-
+        */
 
         /*public void Print()
         {

@@ -1,25 +1,24 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace ProgettoCS
 {
-    public class PacketQueue
+    public class PointsQueue
     {
-        //Queue che funge da buffer per le operazioni da eseguire
-        private ConcurrentQueue<Packet> queue;
+        ConcurrentQueue<double[]> queue;
 
-        public PacketQueue()
+        public PointsQueue()
         {
-            queue = new ConcurrentQueue<Packet>();
+            queue = new ConcurrentQueue<double[]>();
         }
 
-        public Packet GetNextElement()
+        public double[] GetNextElement()
         {
-            Packet element = null;
+            double[] element = null;
             bool dequeued = queue.TryDequeue(out element);
             if (dequeued)
                 return element;
@@ -27,7 +26,7 @@ namespace ProgettoCS
                 return null;
         }
 
-        public void EnqueueElement(Packet el)
+        public void EnqueueElement(double[] el)
         {
             if (el != null)
             {
@@ -44,7 +43,6 @@ namespace ProgettoCS
         {
             return queue.IsEmpty;
         }
-
 
     }
 }

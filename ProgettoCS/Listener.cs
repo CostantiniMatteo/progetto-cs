@@ -18,13 +18,10 @@ namespace ProgettoCS
         // logQueue contiene i file di log che verranno stampati.
         // valQueue contiene i pacchetti ricevuti e parsati dal listener.
         // Entrambe le code sono condivise con Form.cs (per ora).
-        private ConcurrentQueue<string> logQueue;
         private PacketQueue valQueue;
 
-        public Listener(PacketQueue valQueue,
-            ConcurrentQueue<string> logQueue)
+        public Listener(PacketQueue valQueue)
         {
-            this.logQueue = logQueue;
             this.valQueue = valQueue;
         }
 
@@ -34,10 +31,8 @@ namespace ProgettoCS
             TcpListener server = new TcpListener(localAddr, port);
 
             server.Start();
-            logQueue.Enqueue("Waiting for a connection... \n");
 
             TcpClient client = server.AcceptTcpClient();
-            logQueue.Enqueue("Connected!\n");
 
             NetworkStream stream = client.GetStream();
             BinaryReader bin = new BinaryReader(stream);
@@ -167,15 +162,12 @@ namespace ProgettoCS
                             for(int tr = 0; tr < 13; tr++)
                             {
                                 // esempio output su console
-                                logQueue.Enqueue(array[j][tr] + "; " + "\n");
                                 valData[j].Add(array[j][tr]);
                             }
-                            logQueue.Enqueue("\n");
                             array[j].RemoveRange(0, 13); // cancellazione dati
                         }
 
                         valQueue.EnqueueElement(new Packet(valData));
-                        logQueue.Enqueue("\n");
 
                         if(numSensori < 5) // lettura pacchetto seguente
                         {
@@ -191,7 +183,6 @@ namespace ProgettoCS
             }
             catch(IndexOutOfRangeException)
             {
-                logQueue.Enqueue("Finito");
             }
         }
     }

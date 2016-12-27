@@ -10,9 +10,9 @@ namespace ProgettoCS
     {
         private List<List<double>> data;
 
-        public double this[int sensor, int axis]
+        public double this[int sensor, int field]
         {
-            get { return data[sensor][axis]; }
+            get { return data[sensor][field]; }
         }
 
         public Packet(List<List<double>> data)

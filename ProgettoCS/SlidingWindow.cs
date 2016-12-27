@@ -51,14 +51,14 @@ namespace ProgettoCS
 {
     public class SlidingWindow
     {
-        public const int size = 500;
+        private const int size = 500;
 
         // L'array e' di dimensione size+1 perche' altrimenti
         // non si riuscirebbe a distinguere il caso in cui
         // la finestra e' piena dal caso in cui la finestra e'
         // vuota. In questo mondo invece la lista e' vuota quando
         // end == start, mentre e' piena quando end == start - 1.
-        private double[] window = new double[size+1];
+        private Packet[] window = new Packet[size+1];
         private int start;
         private int end;
 
@@ -85,7 +85,7 @@ namespace ProgettoCS
             }
         }
 
-        public void Add(double v)
+        public void Add(Packet v)
         {
             if(Count >= size)
                 throw new InvalidOperationException("Window is full." +
@@ -95,7 +95,7 @@ namespace ProgettoCS
             end = (end + 1) % (size+1);
         }
 
-        public double Get(int index)
+        public Packet Get(int index)
         {
             if(index < 0 || index >= Count)
                 throw new IndexOutOfRangeException("Tried to access position " + index + ". Count = " + Count);
@@ -106,6 +106,11 @@ namespace ProgettoCS
         public void UpdateWindow()
         {
             start = (start + size / 2) % (size+1);
+        }
+
+        public int Size()
+        {
+            return size;
         }
 
 
