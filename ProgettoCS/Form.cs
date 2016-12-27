@@ -21,13 +21,14 @@ namespace ProgettoCS
 
         private GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, magnetometerDiscGraph;
         private PointsQueue pointsQueue;
-        private IEnumerable<Control> c;
+        private IEnumerable<Control> zedList;
 
         public Form(PointsQueue pq)
         {
             InitializeComponent();
             Resize();
-            c = GetAll(this, typeof(ZedGraphControl));
+            zedList = GetAll(this, typeof(ZedGraphControl));
+            zedList = zedList.OrderBy(ZedGraphControl => ZedGraphControl.Name);
 
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
@@ -51,8 +52,8 @@ namespace ProgettoCS
             magnetometerGraph.IsFontsScaled = false;
             magnetometerDiscGraph.IsFontsScaled = false;
 
-            accelerometerGraph.Title.Text = "Accelerometro";
-            gyroscopeGraph.Title.Text = "Giroscopio";
+            accelerometerGraph.Title.Text = "Accelerometro smootato";
+            gyroscopeGraph.Title.Text = "Accelerometro non smootato";
             magnetometerGraph.Title.Text = "Magnetometro senza discontinuità";
             magnetometerDiscGraph.Title.Text = "Magnetometro con discontinuità";
 
@@ -88,11 +89,18 @@ namespace ProgettoCS
 
         public void Draw()
         {
-            var accelerometerPPL = new PointPairList();
+            var ppl = new PointPairList[2];
             double x = 0;
+
+            for (int i = 0; i < ppl.Length; i++)
+            {
+                ppl[i] = new PointPairList();
+            }
+
+            
             while (true)
             {
-                double[] points = pointsQueue.GetNextElement();
+                double[][] points = pointsQueue.GetNextElement();
 
                 if(points != null)
                 {
@@ -102,21 +110,31 @@ namespace ProgettoCS
                     zedGraphControl1.AxisChange();
                     zedGraphControl1.Invalidate();
                     x += 0.02;*/
-                    foreach(double d in points)
+         
+                    for (int j = 0; j < points[0].Length; j++)
                     {
-                        accelerometerPPL.Add(x, points[0]);
-                        accelerometerGraph.CurveList.Clear();
-                        accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
-                        zedGraphControl1.AxisChange();
-                        zedGraphControl1.Invalidate();
-                        x += 0.02;
+                        //dovrebbe essere un i < c.Count() e dovrebbe essere un while 
+                        for (int i = 0; i < 2; i++)  
+                        {
+                            ppl[i].Add(x, points[i][j]);
+                            UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), ppl[i], Color.Red);
+                        }
                         Thread.Sleep(20);
+                        x += 0.02;
                     }
 
                 }
             }
         }
 
+        private void UpgradeGraph(ZedGraphControl z, PointPairList p, Color c)
+        {
+            GraphPane pane = z.GraphPane;
+            pane.CurveList.Clear();
+            pane.AddCurve("", p, c, SymbolType.None);
+            z.AxisChange();
+            z.Invalidate();
+        }
 
 
         /*
@@ -295,12 +313,11 @@ namespace ProgettoCS
 
         private void Form_Load(object sender, EventArgs e)
         {
-            c = c.OrderBy(ZedGraphControl => ZedGraphControl.Name);
             comboBox1.DisplayMember = "Name";
 
-            for (int i = 0; i < c.Count(); i++)
+            for (int i = 0; i < zedList.Count(); i++)
             {
-                comboBox1.Items.Add(c.ElementAt(i));
+                comboBox1.Items.Add(zedList.ElementAt(i));
             }
 
         }
@@ -324,7 +341,7 @@ namespace ProgettoCS
 
                 if (minX < maxX || minY < maxY)
                 {
-                    for (int i = 0; i < c.Count(); i++)
+                    for (int i = 0; i < zedList.Count(); i++)
                     {
                         ZedGraphControl zed = (ZedGraphControl)comboBox1.SelectedItem;
 

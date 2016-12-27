@@ -40,7 +40,7 @@ namespace ProgettoCS
             double res = 0;
             for(var i = s; i <= e; i++)
                 res += data[i];
-            return res / data.Length;
+            return res / (e-s);
         }
 
 
