@@ -89,6 +89,7 @@ namespace ProgettoCS
 
         public void Draw()
         {
+            Color c = new Color();
             var ppl = new PointPairList[2];
             double x = 0;
 
@@ -117,8 +118,11 @@ namespace ProgettoCS
                         for (int i = 0; i < 2; i++)  
                         {
                             ppl[i].Add(x, points[i][j]);
-                            UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), ppl[i], Color.Red);
+                            c = segmentation(ppl[i]);
+
+                            UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i][j], c);
                         }
+
                         Thread.Sleep(20);
                         x += 0.02;
                     }
@@ -127,11 +131,50 @@ namespace ProgettoCS
             }
         }
 
-        private void UpgradeGraph(ZedGraphControl z, PointPairList p, Color c)
+        private Color segmentation(PointPairList ppl)
+        {
+            Color c = Color.Red;
+            int size = ppl.Count;
+            if (size > 4)
+            {
+                double x = ppl[size - 1].X;
+                double y = ppl[size - 1].Y;
+                double oldX = ppl[size - 2].X;
+                double oldY = ppl[size - 2].Y;
+                double incrRapp = (y - oldY) / (x - oldY);
+
+                if (y > 9.60 && y < 10.0 && incrRapp < 40 && incrRapp > -40)
+                    c = Color.Blue;
+                else
+                    c = Color.Red;
+            }
+            return c;
+        }
+
+        private void UpgradeGraph(ZedGraphControl z, double x, double y, Color c)
         {
             GraphPane pane = z.GraphPane;
-            pane.CurveList.Clear();
-            pane.AddCurve("", p, c, SymbolType.None);
+            
+            if (pane.CurveList.Count == 0)
+            {
+                pane.AddCurve("", new double[] {x}, new double[] {y}, c, SymbolType.None);
+            }
+            else
+            {
+                CurveItem curve = pane.CurveList[pane.CurveList.Count - 1];
+
+                if(curve.Color == c)
+                {
+                    curve.AddPoint(x, y);
+                }
+                else
+                {
+                    PointPairList ppl = new PointPairList();
+                    ppl.Add(curve.Points[curve.NPts - 1].X, curve.Points[curve.NPts - 1].Y);
+                    ppl.Add(x, y);
+                    pane.AddCurve("", ppl, c, SymbolType.None);
+                }
+            }
             z.AxisChange();
             z.Invalidate();
         }
