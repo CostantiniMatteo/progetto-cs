@@ -13,6 +13,7 @@ namespace ProgettoCS
         private SlidingWindow window;
         private Form f;
         private double[][] data;
+        private bool firstWindow;
         
 
         public Analyzer(Form f, PacketQueue packetQueue, PointsQueue pointsQueue)
@@ -21,16 +22,17 @@ namespace ProgettoCS
             this.window = new SlidingWindow();
             this.packetQueue = packetQueue;
             this.pointsQueue = pointsQueue;
+            this.firstWindow = true;
 
             data = new double[3][];
             for (var i = 0; i < 3; i++)
-                data[i] = new double[window.Size() / 2];
+                data[i] = new double[window.Size()];
 
         }
 
-        public void Analize()
+        public void Read()
         {
-            int index = 0;
+            
             while(true)
             {
                 while(window.Count < window.Size())
@@ -39,32 +41,54 @@ namespace ProgettoCS
 
                     if(p != null)
                     {
-                        data[0][index] = Functions.Modulus(p.GetAccX(0),
-                            p.GetAccY(0), p.GetAccZ(0));
-                        data[1][index] = Functions.Modulus(p.GetMagX(0),
-                            p.GetMagY(0), p.GetMagZ(0));
-                        data[2][index] = Functions.Modulus(p.GetGyrX(0),
-                            p.GetGyrY(0), p.GetGyrZ(0));
-                        index++;
                         window.Add(p);
-
-                        if (index == (window.Size() / 2))
-                        {
-                            // array pieno, Analizza
-                            double[] smoothedAcc = Functions.Smooth(data[0], 10);
-                            double[] smoothedGyr = Functions.Smooth(data[2], 10);
-
-                            pointsQueue.EnqueueElement(new double[][] { smoothedAcc, data[0] });
-                            index = 0;
-                        }
                     }
                 }
+                Analyze();
+
+                firstWindow = false;
 
                 window.UpdateWindow();
                 
 
 
             }
+        }
+
+        private void Analyze()
+        {
+            var modAcc = new List<double>(window.Count);
+            Packet p = null;
+
+            for (var i = 0; i < window.Count; i++)
+            {
+                p = window.Get(i);
+                modAcc.Add(Functions.Modulus(p.GetAccX(0),
+                    p.GetAccY(0), p.GetAccZ(0)));
+                /*data[0][i] = Functions.Modulus(p.GetAccX(0),
+                p.GetAccY(0), p.GetAccZ(0));
+                data[1][i] = Functions.Modulus(p.GetMagX(0),
+                    p.GetMagY(0), p.GetMagZ(0));
+                data[2][i] = Functions.Modulus(p.GetGyrX(0),
+                    p.GetGyrY(0), p.GetGyrZ(0));
+                */
+
+            }
+
+            // array pieno, Analizza
+            int range = 10;
+            int start = firstWindow ? 0 : modAcc.Count / 2 - 2 * range;
+            int cacca = firstWindow ? 0 : modAcc.Count / 2 - range;
+            List<double> temp = modAcc.GetRange(start, modAcc.Count - start);
+            List<double> smoothedAcc = Functions.Smooth(temp, range);
+
+            foreach (var d in smoothedAcc)
+            {
+                pointsQueue.EnqueueElement(new double[] { d, modAcc[cacca] });
+                cacca++;
+            }
+
+
         }
 
     }

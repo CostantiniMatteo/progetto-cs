@@ -83,13 +83,13 @@ namespace ProgettoCS
             zedGraphControl1.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
             zedGraphControl2.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
             zedGraphControl3.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
-            zedGraphControl4.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);       
+            zedGraphControl4.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
 
         }
 
         public void Draw()
         {
-            Color c = new Color();
+            Color c = Color.Red;
             var ppl = new PointPairList[2];
             double x = 0;
 
@@ -98,40 +98,29 @@ namespace ProgettoCS
                 ppl[i] = new PointPairList();
             }
 
-            
+
             while (true)
             {
-                double[][] points = pointsQueue.GetNextElement();
+                double[] points = pointsQueue.GetNextElement();
 
-                if(points != null)
+                if (points != null)
                 {
-                    /*accelerometerPPL.Add(x, points[0]);
-                    accelerometerGraph.CurveList.Clear();
-                    accelerometerGraph.AddCurve("", accelerometerPPL, Color.Red, SymbolType.None);
-                    zedGraphControl1.AxisChange();
-                    zedGraphControl1.Invalidate();
-                    x += 0.02;*/
-         
-                    for (int j = 0; j < points[0].Length; j++)
+                    for (int i = 0; i < points.Length; i++)
                     {
-                        //dovrebbe essere un i < c.Count() e dovrebbe essere un while 
-                        for (int i = 0; i < 2; i++)  
-                        {
-                            ppl[i].Add(x, points[i][j]);
-                            c = segmentation(ppl[i]);
-
-                            UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i][j], c);
-                        }
-
-                        Thread.Sleep(20);
-                        x += 0.02;
+                        ppl[i].Add(x, points[i]);
+                        //c = segmentation(ppl[i]);
+                        
+                        UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
                     }
 
+                    Thread.Sleep(20);
+                    x += 0.02;
                 }
             }
         }
 
-        private Color segmentation(PointPairList ppl)
+        // Prova
+        private Color Segmentation(PointPairList ppl)
         {
             Color c = Color.Red;
             int size = ppl.Count;
@@ -154,16 +143,16 @@ namespace ProgettoCS
         private void UpgradeGraph(ZedGraphControl z, double x, double y, Color c)
         {
             GraphPane pane = z.GraphPane;
-            
+
             if (pane.CurveList.Count == 0)
             {
-                pane.AddCurve("", new double[] {x}, new double[] {y}, c, SymbolType.None);
+                pane.AddCurve("", new double[] { x }, new double[] { y }, c, SymbolType.None);
             }
             else
             {
                 CurveItem curve = pane.CurveList[pane.CurveList.Count - 1];
 
-                if(curve.Color == c)
+                if (curve.Color == c)
                 {
                     curve.AddPoint(x, y);
                 }
@@ -411,7 +400,7 @@ namespace ProgettoCS
             if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "[^0-9]"))
             {
                 ((TextBox)sender).Text = "";
-                MessageBox.Show("Please enter only numbers."); 
+                MessageBox.Show("Please enter only numbers.");
             }
         }
 

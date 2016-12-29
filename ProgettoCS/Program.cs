@@ -23,7 +23,7 @@ namespace ProgettoCS {
             Analyzer a = new Analyzer(f, packetQueue, pointsQueue);
 
             Thread listenerThread = new Thread(l.Parse);
-            Thread analyzerThread = new Thread(a.Analize);
+            Thread analyzerThread = new Thread(a.Read);
             Thread drawThread = new Thread(f.Draw);
             listenerThread.Start();
             analyzerThread.Start();

@@ -9,16 +9,16 @@ namespace ProgettoCS
 {
     public class PointsQueue
     {
-        ConcurrentQueue<double[][]> queue;
+        ConcurrentQueue<double[]> queue;
 
         public PointsQueue()
         {
-            queue = new ConcurrentQueue<double[][]>();
+            queue = new ConcurrentQueue<double[]>();
         }
 
-        public double[][] GetNextElement()
+        public double[] GetNextElement()
         {
-            double[][] element = null;
+            double[] element = null;
             bool dequeued = queue.TryDequeue(out element);
             if (dequeued)
                 return element;
@@ -26,7 +26,8 @@ namespace ProgettoCS
                 return null;
         }
 
-        public void EnqueueElement(double[][] el)
+
+        public void EnqueueElement(double[] el)
         {
             if (el != null)
             {

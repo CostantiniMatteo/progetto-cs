@@ -9,33 +9,23 @@ namespace ProgettoCS
     public static class Functions
     {
 
-        public static double[] Smooth(double[] data, int range)
+        public static List<double> Smooth(List<double> data, int range)
         {
 
-            var smoothed = new double[data.Length];
+            var smoothed = new List<double>(data.Count - (2 * range));
 
-            for(var i = 0; i < range; i++)
+            for(var i = range; i < data.Count - range; i++)
             {
-                smoothed[i] = data[i];
-            }
-
-            for(var i = range; i < data.Length - range; i++)
-            {
-                smoothed[i] = Mean(data, i - range, i + range);
-            }
-
-            for (var i = data.Length - range; i < data.Length; i++)
-            {
-                smoothed[i] = data[i];
+                smoothed.Add(Mean(data, i - range, i + range));
             }
 
             return smoothed;
         }
 
 
-        public static double Mean(double[] data, int s = 0, int e = -1)
+        public static double Mean(List<double> data, int s = 0, int e = -1)
         {
-            e = e < 0 ? data.Length : e;
+            e = e < 0 ? data.Count : e;
 
             double res = 0;
             for(var i = s; i <= e; i++)
@@ -61,12 +51,12 @@ namespace ProgettoCS
 
         }
 
-        public static double[] StdDev(double[] data, int range)
+        public static double[] StdDev(List<double> data, int range)
         {
-            var res = new double[data.Length];
+            var res = new double[data.Count];
             double mean = Mean(data);
 
-            for(var i = range; i < data.Length - range; i++)
+            for(var i = range; i < data.Count - range; i++)
                 res[i] = _stdDev(data, i - range, i + range);
 
             return res;
@@ -74,9 +64,9 @@ namespace ProgettoCS
 
         }
 
-        private static double _stdDev(double[] data, int s, int e)
+        private static double _stdDev(List<double> data, int s, int e)
         {
-            e = e < 0 ? data.Length : e;
+            e = e < 0 ? data.Count : e;
 
             double res = 0;
             double mean = Mean(data, s, e);
