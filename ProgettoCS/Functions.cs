@@ -40,12 +40,12 @@ namespace ProgettoCS
         }
 
 
-        public static double[] DifferenceQuotient(double[] data, double increment = 0.02)
+        public static List<double> DifferenceQuotient(List<double> data, double increment = 0.02)
         {
-            var res = new double[data.Length];
+            var res = new List<double>(data.Count - 1);
 
-            for(var i = 0; i < data.Length - 1; i++)
-                res[i] = data[i + 1] - data[i] / increment;
+            for(var i = 1; i < data.Count; i++)
+                res.Add(data[i] - data[i - 1] / increment);
 
             return res;
 
@@ -77,5 +77,29 @@ namespace ProgettoCS
             return Math.Sqrt(res / (e - s));
         }
 
+        public static double FunzioneOrientamento(double z, double y)
+        {
+            return Math.Atan(y / z);
+        }
+
+        public static List<double> RemoveDiscontinuity(List<double> theta)
+        {
+            List<double> incrRapp = DifferenceQuotient(theta);
+
+            for (int i = 1; i < theta.Count; i++) {
+
+                if (incrRapp[i] > 120)
+                {
+                    theta[i] = theta[i] - Math.PI;
+
+                }
+                else if (incrRapp[i] < -120)
+                {
+                    theta[i] = theta[i] + Math.PI;
+                }
+            }
+
+            return theta;
+        }
     }
 }

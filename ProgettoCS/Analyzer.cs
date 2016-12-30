@@ -59,6 +59,7 @@ namespace ProgettoCS
         private void Analyze()
         {
             var modAcc = new List<double>(window.Count);
+            var theta = new List<double>(window.Count);
             Packet p = null;
 
             for (var i = 0; i < window.Count; i++)
@@ -66,6 +67,7 @@ namespace ProgettoCS
                 p = window.Get(i);
                 modAcc.Add(Functions.Modulus(p.GetAccX(0),
                     p.GetAccY(0), p.GetAccZ(0)));
+                theta.Add(Functions.FunzioneOrientamento(p.GetAccZ(0), p.GetAccY(0)));
                 /*data[0][i] = Functions.Modulus(p.GetAccX(0),
                 p.GetAccY(0), p.GetAccZ(0));
                 data[1][i] = Functions.Modulus(p.GetMagX(0),
@@ -75,6 +77,8 @@ namespace ProgettoCS
                 */
 
             }
+
+            List<double> contTheta = Functions.RemoveDiscontinuity(theta);
 
             // array pieno, Analizza
             int range = 10;
