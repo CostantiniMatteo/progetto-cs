@@ -183,6 +183,7 @@ namespace ProgettoCS
             }
             catch(IndexOutOfRangeException)
             {
+                valQueue.EnqueueElement(new Packet(null));
             }
         }
     }

@@ -14,7 +14,8 @@ namespace ProgettoCS
         private Form f;
         private double[][] data;
         private bool firstWindow;
-        
+        private bool lastWindow;
+
 
         public Analyzer(Form f, PacketQueue packetQueue, PointsQueue pointsQueue)
         {
@@ -33,15 +34,18 @@ namespace ProgettoCS
         public void Read()
         {
             
-            while(true)
+            while(!lastWindow)
             {
-                while(window.Count < window.Size())
+                while(window.Count < window.Size() && !lastWindow)
                 {
                     var p = packetQueue.GetNextElement();
 
                     if(p != null)
                     {
-                        window.Add(p);
+                        if (p.IsLastPacket)
+                            lastWindow = true;
+                        else
+                            window.Add(p);
                     }
                 }
                 Analyze();
@@ -49,9 +53,6 @@ namespace ProgettoCS
                 firstWindow = false;
 
                 window.UpdateWindow();
-                
-
-
             }
         }
 

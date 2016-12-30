@@ -10,6 +10,11 @@ namespace ProgettoCS
     {
         private List<List<double>> data;
 
+        public bool IsLastPacket
+        {
+            get { return data == null; }
+        }
+
         public double this[int sensor, int field]
         {
             get { return data[sensor][field]; }
