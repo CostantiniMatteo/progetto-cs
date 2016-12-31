@@ -90,7 +90,7 @@ namespace ProgettoCS
         public void Draw()
         {
             Color c = Color.Red;
-            var ppl = new PointPairList[2];
+            var ppl = new PointPairList[4];
             double x = 0;
 
             for (int i = 0; i < ppl.Length; i++)
@@ -107,13 +107,13 @@ namespace ProgettoCS
                 {
                     for (int i = 0; i < points.Length; i++)
                     {
-                        ppl[i].Add(x, points[i]);
+                        //ppl[i].Add(x, points[i]);
                         //c = segmentation(ppl[i]);
                         
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
                     }
 
-                    Thread.Sleep(20);
+                    Thread.Sleep(5);
                     x += 0.02;
                 }
             }

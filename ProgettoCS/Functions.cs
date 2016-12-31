@@ -86,14 +86,14 @@ namespace ProgettoCS
         {
             List<double> incrRapp = DifferenceQuotient(theta);
 
-            for (int i = 1; i < theta.Count; i++) {
+            for (int i = 0; i < incrRapp.Count; i++) {
 
                 if (incrRapp[i] > 120)
                 {
                     theta[i] = theta[i] - Math.PI;
 
                 }
-                else if (incrRapp[i] < -120)
+                else if (incrRapp[i] < - 120)
                 {
                     theta[i] = theta[i] + Math.PI;
                 }

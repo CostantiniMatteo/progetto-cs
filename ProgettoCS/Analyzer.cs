@@ -67,7 +67,7 @@ namespace ProgettoCS
                 p = window.Get(i);
                 modAcc.Add(Functions.Modulus(p.GetAccX(0),
                     p.GetAccY(0), p.GetAccZ(0)));
-                theta.Add(Functions.FunzioneOrientamento(p.GetAccZ(0), p.GetAccY(0)));
+                theta.Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
                 /*data[0][i] = Functions.Modulus(p.GetAccX(0),
                 p.GetAccY(0), p.GetAccZ(0));
                 data[1][i] = Functions.Modulus(p.GetMagX(0),
@@ -78,20 +78,32 @@ namespace ProgettoCS
 
             }
 
-            List<double> contTheta = Functions.RemoveDiscontinuity(theta);
 
             // array pieno, Analizza
             int range = 10;
             int start = firstWindow ? 0 : modAcc.Count / 2 - 2 * range;
             int cacca = firstWindow ? 0 : modAcc.Count / 2 - range;
-            List<double> temp = modAcc.GetRange(start, modAcc.Count - start);
-            List<double> smoothedAcc = Functions.Smooth(temp, range);
 
-            foreach (var d in smoothedAcc)
+            List<double> contTheta = Functions.RemoveDiscontinuity(theta);
+            List<double> tempT = contTheta.GetRange(start, contTheta.Count - start);
+            List<double> smoothedTheta = Functions.Smooth(tempT, range);
+
+            List<double> tempA = modAcc.GetRange(start, modAcc.Count - start);
+            List<double> smoothedAcc = Functions.Smooth(tempA, range);
+
+            /*foreach (var d in smoothedAcc)
             {
                 pointsQueue.EnqueueElement(new double[] { d, modAcc[cacca] });
                 cacca++;
+            }*/
+
+            for(var i = 0; i < smoothedTheta.Count; i++)
+            {
+                pointsQueue.EnqueueElement(new double[] { smoothedAcc[i], modAcc[cacca], smoothedTheta[i], contTheta[cacca] });
+                cacca++;
             }
+
+
 
 
         }
