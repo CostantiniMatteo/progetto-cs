@@ -84,6 +84,7 @@ namespace ProgettoCS
             int start = firstWindow ? 0 : modAcc.Count / 2 - 2 * range;
             int cacca = firstWindow ? 0 : modAcc.Count / 2 - range;
 
+
             List<double> contTheta = Functions.RemoveDiscontinuity(theta);
             List<double> tempT = contTheta.GetRange(start, contTheta.Count - start);
             List<double> smoothedTheta = Functions.Smooth(tempT, range);

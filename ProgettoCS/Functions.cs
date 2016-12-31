@@ -84,16 +84,25 @@ namespace ProgettoCS
 
         public static List<double> RemoveDiscontinuity(List<double> theta)
         {
-            List<double> incrRapp = DifferenceQuotient(theta);
 
-            for (int i = 0; i < incrRapp.Count; i++) {
+            for (int i = 1; i < theta.Count; i++) {
 
-                if (incrRapp[i] > 120)
+                double disperazione;
+                if(theta[i] - 0.6895 < 0.001 && theta[i] - 0.6895 > - 0.001)
+                {
+                    disperazione = theta[i];
+                    disperazione = int.MaxValue;
+
+                }
+
+                double height = theta[i] - theta[i - 1];
+
+                if (height > 1.2)
                 {
                     theta[i] = theta[i] - Math.PI;
 
                 }
-                else if (incrRapp[i] < - 120)
+                else if (height < - 1.2)
                 {
                     theta[i] = theta[i] + Math.PI;
                 }
