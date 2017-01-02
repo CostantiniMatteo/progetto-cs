@@ -11,7 +11,7 @@ namespace TestProgettoCS
         [TestMethod]
         public void SWTest()
         {
-            var s = new SlidingWindow();
+            var s = new SlidingWindow<Packet>();
 /*
             for(var i = 0; i < 500; i++)
                 s.Add(i);

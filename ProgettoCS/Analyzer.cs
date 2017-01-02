@@ -10,30 +10,30 @@ namespace ProgettoCS
     {
         private PacketQueue packetQueue;
         private PointsQueue pointsQueue;
-        private SlidingWindow window;
         private Form f;
-        private double[][] data;
+
+        private SlidingWindow<Packet> window;
         private bool firstWindow;
         private bool lastWindow;
+
+        SlidingWindow<double>[] data;
 
 
         public Analyzer(Form f, PacketQueue packetQueue, PointsQueue pointsQueue)
         {
             this.f = f;
-            this.window = new SlidingWindow();
+            this.window = new SlidingWindow<Packet>();
             this.packetQueue = packetQueue;
             this.pointsQueue = pointsQueue;
             this.firstWindow = true;
-
-            data = new double[3][];
-            for (var i = 0; i < 3; i++)
-                data[i] = new double[window.Size()];
-
+            this.data = new SlidingWindow<double>[5];
+            for(var i = 0; i < data.Length; i++)
+                data[i] = new SlidingWindow<double>();
         }
 
         public void Read()
         {
-            
+
             while(!lastWindow)
             {
                 while(window.Count < window.Size() && !lastWindow)
@@ -42,7 +42,7 @@ namespace ProgettoCS
 
                     if(p != null)
                     {
-                        if (p.IsLastPacket)
+                        if(p.IsLastPacket)
                             lastWindow = true;
                         else
                             window.Add(p);
@@ -58,38 +58,37 @@ namespace ProgettoCS
 
         private void Analyze()
         {
-            var modAcc = new List<double>(window.Count);
-            var theta = new List<double>(window.Count);
+
             Packet p = null;
 
-            for (var i = 0; i < window.Count; i++)
-            {
-                p = window.Get(i);
-                modAcc.Add(Functions.Modulus(p.GetAccX(0),
-                    p.GetAccY(0), p.GetAccZ(0)));
-                theta.Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
-                /*data[0][i] = Functions.Modulus(p.GetAccX(0),
-                p.GetAccY(0), p.GetAccZ(0));
-                data[1][i] = Functions.Modulus(p.GetMagX(0),
-                    p.GetMagY(0), p.GetMagZ(0));
-                data[2][i] = Functions.Modulus(p.GetGyrX(0),
-                    p.GetGyrY(0), p.GetGyrZ(0));
-                */
 
+            var i = firstWindow ? 0 : window.Count / 2;
+            for(; i < window.Count; i++)
+            {
+                p = window[i];
+
+                // Modulo accelerometro
+                data[0].Add(Functions.Modulus(p.GetAccX(0),
+                    p.GetAccY(0), p.GetAccZ(0)));
+
+                // Theta
+                data[1].Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
             }
 
 
             // array pieno, Analizza
             int range = 10;
-            int start = firstWindow ? 0 : modAcc.Count / 2 - 2 * range;
-            int cacca = firstWindow ? 0 : modAcc.Count / 2 - range;
+            int start = firstWindow ? 0 : data[0].Count / 2 - 2 * range;
 
 
-            List<double> contTheta = Functions.RemoveDiscontinuity(theta);
-            List<double> tempT = contTheta.GetRange(start, contTheta.Count - start);
+            int cacca = firstWindow ? 0 : data[0].Count / 2 - range;
+
+
+            Functions.RemoveDiscontinuity(data[1]);
+            List<double> tempT = data[1].GetRange(start, data[1].Count - start);
             List<double> smoothedTheta = Functions.Smooth(tempT, range);
 
-            List<double> tempA = modAcc.GetRange(start, modAcc.Count - start);
+            List<double> tempA = data[0].GetRange(start, data[0].Count - start);
             List<double> smoothedAcc = Functions.Smooth(tempA, range);
 
             /*foreach (var d in smoothedAcc)
@@ -98,11 +97,14 @@ namespace ProgettoCS
                 cacca++;
             }*/
 
-            for(var i = 0; i < smoothedTheta.Count; i++)
+            for(var nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor = 0; nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor < smoothedTheta.Count; nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor++)
             {
-                pointsQueue.EnqueueElement(new double[] { smoothedAcc[i], modAcc[cacca], smoothedTheta[i], contTheta[cacca] });
+                pointsQueue.EnqueueElement(new double[] { smoothedAcc[nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor], data[0][cacca], smoothedTheta[nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor], data[1][cacca] });
                 cacca++;
             }
+
+            for(var unAltroNomeDiVariabilePerIterare = 0; unAltroNomeDiVariabilePerIterare < data.Length; unAltroNomeDiVariabilePerIterare++)
+                data[unAltroNomeDiVariabilePerIterare].UpdateWindow();
 
 
 
