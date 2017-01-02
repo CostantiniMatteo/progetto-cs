@@ -88,14 +88,16 @@ namespace ProgettoCS
             for (int i = 1; i < data.Count; i++) {
                 double height = data[i] - data[i - 1];
 
-                if (height > 1.2)
+                int alfa = Convert.ToInt32(Math.Abs(height / Math.PI));
+
+                if (height > 1.9)
                 {
-                    data[i] = data[i] - Math.PI;
+                    data[i] = data[i] - alfa * Math.PI;
 
                 }
-                else if (height < - 1.2)
+                else if (height < - 1.9)
                 {
-                    data[i] = data[i] + Math.PI;
+                    data[i] = data[i] + alfa * Math.PI;
                 }
             }
 

@@ -113,7 +113,7 @@ namespace ProgettoCS
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
                     }
 
-                    //Thread.Sleep(50);
+                    Thread.Sleep(20);
                     x += 0.02;
                 }
             }

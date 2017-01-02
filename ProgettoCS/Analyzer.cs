@@ -62,7 +62,7 @@ namespace ProgettoCS
             Packet p = null;
 
 
-            var i = firstWindow ? 0 : window.Count / 2;
+            var i = firstWindow ? 0 : window.Size() / 2;
             for(; i < window.Count; i++)
             {
                 p = window[i];
@@ -78,10 +78,10 @@ namespace ProgettoCS
 
             // array pieno, Analizza
             int range = 10;
-            int start = firstWindow ? 0 : data[0].Count / 2 - 2 * range;
+            int start = firstWindow ? 0 : data[0].Size() / 2 - 2 * range;
 
 
-            int cacca = firstWindow ? 0 : data[0].Count / 2 - range;
+            int cacca = firstWindow ? 0 : data[0].Size() / 2 - range;
 
 
             Functions.RemoveDiscontinuity(data[1]);

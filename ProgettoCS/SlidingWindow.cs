@@ -135,7 +135,7 @@ namespace ProgettoCS
         {
             var res = new List<T>(count);
 
-            for(var i = index; i < count; i++)
+            for(var i = index; i < (index + count); i++)
                 res.Add(this[i]);
 
             return res;

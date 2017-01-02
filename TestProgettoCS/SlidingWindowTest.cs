@@ -11,8 +11,8 @@ namespace TestProgettoCS
         [TestMethod]
         public void SWTest()
         {
-            var s = new SlidingWindow<Packet>();
-/*
+            var s = new SlidingWindow<int>();
+
             for(var i = 0; i < 500; i++)
                 s.Add(i);
 
@@ -31,7 +31,14 @@ namespace TestProgettoCS
                 s.Add(i);
 
             Assert.AreEqual(500, s.Count);
-*/
+
+            s[499] = 1000;
+            int x = s[499];
+
+            s.UpdateWindow();
+
+            Assert.AreEqual(x, s[249]);
+
         }
 
         [TestMethod]
