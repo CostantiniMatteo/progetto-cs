@@ -78,7 +78,7 @@ namespace ProgettoCS
         }
 
         public static double FunzioneOrientamento(double z, double y)
-        {
+        { 
             return Math.Atan(y / z);
         }
 
@@ -88,19 +88,34 @@ namespace ProgettoCS
             for (int i = 1; i < data.Count; i++) {
                 double height = data[i] - data[i - 1];
 
-                int alfa = Convert.ToInt32(Math.Abs(height / Math.PI));
+                int alfa = Convert.ToInt32(Math.Abs(height / Math.PI)); //genera Eccezione non gestita di tipo 'System.OverflowException' in mscorlib.dll
 
-                if (height > 1.9)
+                if (height > 2.4)
                 {
                     data[i] = data[i] - alfa * Math.PI;
 
                 }
-                else if (height < - 1.9)
+                else if (height < - 2.4)
                 {
                     data[i] = data[i] + alfa * Math.PI;
                 }
             }
 
+        }
+
+        public static double Yaw(double q0, double q1, double q2, double q3)
+        {
+            return Math.Atan((2 * q1 * q2 + 2 * q0 * q3) / (q0 * q0 * 2 + 2 * q1 * q1 - 1));
+        }
+
+        public static double Pitch(double q0, double q1, double q2, double q3)
+        {
+            return -Math.Asin(2 * q1 * q3 - 2 * q0 * q2);
+        }
+
+        public static double Roll(double q0, double q1, double q2, double q3)
+        {
+            return Math.Atan((2 * q2 * q3 + 2 * q0 * q1) / (2 * q0 * q0 + 2 * q3 * q3 - 1));
         }
     }
 }

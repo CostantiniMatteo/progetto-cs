@@ -18,6 +18,8 @@ namespace ProgettoCS
 
         SlidingWindow<double>[] data;
 
+        List<double> provaColella;
+
 
         public Analyzer(Form f, PacketQueue packetQueue, PointsQueue pointsQueue)
         {
@@ -27,6 +29,7 @@ namespace ProgettoCS
             this.pointsQueue = pointsQueue;
             this.firstWindow = true;
             this.data = new SlidingWindow<double>[5];
+          //  this.provaColella = new List<double>();
             for(var i = 0; i < data.Length; i++)
                 data[i] = new SlidingWindow<double>();
         }
@@ -54,6 +57,7 @@ namespace ProgettoCS
 
                 window.UpdateWindow();
             }
+
         }
 
         private void Analyze()
@@ -73,6 +77,16 @@ namespace ProgettoCS
 
                 // Theta
                 data[1].Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
+               // provaColella.Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
+
+                // Yaw
+                data[2].Add(Functions.Yaw(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
+
+                // Pitch
+                data[3].Add(Functions.Pitch(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
+
+                // Roll
+                data[4].Add(Functions.Roll(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
             }
 
 
@@ -85,11 +99,17 @@ namespace ProgettoCS
 
 
             Functions.RemoveDiscontinuity(data[1]);
+            Functions.RemoveDiscontinuity(data[2]);
+            Functions.RemoveDiscontinuity(data[4]);
             List<double> tempT = data[1].GetRange(start, data[1].Count - start);
             List<double> smoothedTheta = Functions.Smooth(tempT, range);
 
             List<double> tempA = data[0].GetRange(start, data[0].Count - start);
             List<double> smoothedAcc = Functions.Smooth(tempA, range);
+
+
+            List<double> tempY = data[2].GetRange(start, data[2].Count - start);
+            List<double> smoothedYaw = Functions.Smooth(tempY, range);
 
             /*foreach (var d in smoothedAcc)
             {
@@ -97,14 +117,14 @@ namespace ProgettoCS
                 cacca++;
             }*/
 
-            for(var nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor = 0; nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor < smoothedTheta.Count; nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor++)
+            for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { smoothedAcc[nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor], data[0][cacca], smoothedTheta[nomeDiUnaVariabileCheUsoComeContatorePerIterareInUnCicloFor], data[1][cacca] });
+                pointsQueue.EnqueueElement(new double[] { data[4][cacca]/*smoothedAcc[j]*/, data[3][cacca], data[2][cacca], smoothedYaw[j] });
                 cacca++;
             }
 
-            for(var unAltroNomeDiVariabilePerIterare = 0; unAltroNomeDiVariabilePerIterare < data.Length; unAltroNomeDiVariabilePerIterare++)
-                data[unAltroNomeDiVariabilePerIterare].UpdateWindow();
+            for(var k = 0; k < data.Length; k++)
+                data[k].UpdateWindow();
 
 
 

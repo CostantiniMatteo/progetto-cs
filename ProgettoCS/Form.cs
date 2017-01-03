@@ -52,10 +52,10 @@ namespace ProgettoCS
             magnetometerGraph.IsFontsScaled = false;
             magnetometerDiscGraph.IsFontsScaled = false;
 
-            accelerometerGraph.Title.Text = "Accelerometro smootato";
-            gyroscopeGraph.Title.Text = "Accelerometro non smootato";
-            magnetometerGraph.Title.Text = "Magnetometro senza discontinuità";
-            magnetometerDiscGraph.Title.Text = "Magnetometro con discontinuità";
+            accelerometerGraph.Title.Text = "Roll";
+            gyroscopeGraph.Title.Text = "Pitch";
+            magnetometerGraph.Title.Text = "Yaw";
+            magnetometerDiscGraph.Title.Text = "Yaw smotato";
 
             accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
             accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
@@ -113,7 +113,7 @@ namespace ProgettoCS
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
                     }
 
-                    Thread.Sleep(20);
+                    Thread.Sleep(5);
                     x += 0.02;
                 }
             }
@@ -360,6 +360,26 @@ namespace ProgettoCS
             textBox2.Enabled = true;
             textBox3.Enabled = true;
             textBox4.Enabled = true;
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void button1_Click(object sender, EventArgs e)
