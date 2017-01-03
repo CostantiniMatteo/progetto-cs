@@ -79,6 +79,7 @@ namespace ProgettoCS
         {
             this.Location = new Point(0, 0);
             this.Size = Screen.PrimaryScreen.WorkingArea.Size;
+            this.WindowState = FormWindowState.Maximized;
             tableLayoutPanel1.Size = new Size(this.Width - 250, this.Height - 63);
             zedGraphControl1.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
             zedGraphControl2.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
@@ -99,17 +100,17 @@ namespace ProgettoCS
             }
 
 
-            while (true)
+            while (!Program.stop)
             {
                 double[] points = pointsQueue.GetNextElement();
 
-                if (points != null)
+                if (points != null && !Program.stop)
                 {
                     for (int i = 0; i < points.Length; i++)
                     {
                         //ppl[i].Add(x, points[i]);
                         //c = segmentation(ppl[i]);
-                        
+
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
                     }
 
@@ -117,6 +118,7 @@ namespace ProgettoCS
                     x += 0.02;
                 }
             }
+
         }
 
         // Prova
@@ -362,23 +364,17 @@ namespace ProgettoCS
             textBox4.Enabled = true;
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
+            Program.StopThreads();
 
-        }
+            Program.StartThreads();
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
+            for (int i = 0; i < zedList.Count(); i++)
+            {
+                ZedGraphControl z = (ZedGraphControl)zedList.ElementAt(i);
+                z.GraphPane.CurveList.Clear();
+            }
 
         }
 

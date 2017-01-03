@@ -14,7 +14,7 @@ namespace ProgettoCS
 
             var smoothed = new List<double>(data.Count - (2 * range));
 
-            for(var i = range; i < data.Count - range; i++)
+            for (var i = range; i < data.Count - range; i++)
             {
                 smoothed.Add(Mean(data, i - range, i + range));
             }
@@ -28,9 +28,9 @@ namespace ProgettoCS
             e = e < 0 ? data.Count : e;
 
             double res = 0;
-            for(var i = s; i <= e; i++)
+            for (var i = s; i <= e; i++)
                 res += data[i];
-            return res / (e-s);
+            return res / (e - s);
         }
 
 
@@ -44,7 +44,7 @@ namespace ProgettoCS
         {
             var res = new List<double>(data.Count - 1);
 
-            for(var i = 1; i < data.Count; i++)
+            for (var i = 1; i < data.Count; i++)
                 res.Add(data[i] - data[i - 1] / increment);
 
             return res;
@@ -56,7 +56,7 @@ namespace ProgettoCS
             var res = new double[data.Count];
             double mean = Mean(data);
 
-            for(var i = range; i < data.Count - range; i++)
+            for (var i = range; i < data.Count - range; i++)
                 res[i] = _stdDev(data, i - range, i + range);
 
             return res;
@@ -71,31 +71,32 @@ namespace ProgettoCS
             double res = 0;
             double mean = Mean(data, s, e);
 
-            for(var i = s; i <= e; i++)
+            for (var i = s; i <= e; i++)
                 res += Math.Pow(data[i] - mean, 2);
 
             return Math.Sqrt(res / (e - s));
         }
 
         public static double FunzioneOrientamento(double z, double y)
-        { 
+        {
             return Math.Atan(y / z);
         }
 
         public static void RemoveDiscontinuity(SlidingWindow<double> data)
         {
 
-            for (int i = 1; i < data.Count; i++) {
+            for (int i = 1; i < data.Count; i++)
+            {
                 double height = data[i] - data[i - 1];
 
-                int alfa = Convert.ToInt32(Math.Abs(height / Math.PI)); //genera Eccezione non gestita di tipo 'System.OverflowException' in mscorlib.dll
+                int alfa = Convert.ToInt32(Math.Abs(height / Math.PI));
 
                 if (height > 2.4)
                 {
                     data[i] = data[i] - alfa * Math.PI;
 
                 }
-                else if (height < - 2.4)
+                else if (height < -2.4)
                 {
                     data[i] = data[i] + alfa * Math.PI;
                 }

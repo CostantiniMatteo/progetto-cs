@@ -7,6 +7,15 @@ using System.Windows.Forms;
 
 namespace ProgettoCS {
     static class Program {
+
+        public static volatile bool stop = false;
+        private static Thread listenerThread;
+        private static Thread analyzerThread;
+        private static Thread drawThread;
+        private static Listener l;
+        private static Form f;
+        private static Analyzer a;
+        
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -18,17 +27,37 @@ namespace ProgettoCS {
             PacketQueue packetQueue = new PacketQueue();
             PointsQueue pointsQueue = new PointsQueue();
 
-            Listener l = new Listener(packetQueue);
-            Form f = new Form(pointsQueue);
-            Analyzer a = new Analyzer(f, packetQueue, pointsQueue);
+            l = new Listener(packetQueue);
+            f = new Form(pointsQueue);
+            a = new Analyzer(f, packetQueue, pointsQueue);
 
-            Thread listenerThread = new Thread(l.Parse);
-            Thread analyzerThread = new Thread(a.Read);
-            Thread drawThread = new Thread(f.Draw);
-            listenerThread.Start();
+            listenerThread = new Thread(l.Parse);
+            analyzerThread = new Thread(a.Read);
+            drawThread = new Thread(f.Draw);
+
+            StartThreads();
+
+            Application.Run(f);
+        }
+
+        public static void StartThreads()
+        {
+            while (listenerThread.IsAlive || analyzerThread.IsAlive || drawThread.IsAlive) ;
+
+            listenerThread = new Thread(l.Parse);
+            analyzerThread = new Thread(a.Read);
+            drawThread = new Thread(f.Draw);
+
+            stop = false;
+
             analyzerThread.Start();
             drawThread.Start();
-            Application.Run(f);
+            listenerThread.Start();
+        }
+
+        public static void StopThreads()
+        {
+            stop = true;
         }
     }
 }

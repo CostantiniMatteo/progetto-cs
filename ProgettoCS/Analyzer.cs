@@ -37,9 +37,9 @@ namespace ProgettoCS
         public void Read()
         {
 
-            while(!lastWindow)
+            while(!lastWindow && !Program.stop)
             {
-                while(window.Count < window.Size() && !lastWindow)
+                while(window.Count < window.Size() && !lastWindow && !Program.stop)
                 {
                     var p = packetQueue.GetNextElement();
 
