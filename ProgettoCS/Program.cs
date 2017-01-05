@@ -44,7 +44,6 @@ namespace ProgettoCS {
         public static void StartThreads()
         {
             while (listenerThread.IsAlive || analyzerThread.IsAlive || drawThread.IsAlive) ;
-
             a = new Analyzer(f, packetQueue, pointsQueue);
 
             listenerThread = new Thread(l.Parse);

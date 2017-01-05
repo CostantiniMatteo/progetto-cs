@@ -29,31 +29,32 @@ namespace ProgettoCS
             this.pointsQueue = pointsQueue;
             this.firstWindow = true;
             this.data = new SlidingWindow<double>[5];
-          //  this.provaColella = new List<double>();
-            for(var i = 0; i < data.Length; i++)
+            //  this.provaColella = new List<double>();
+            for (var i = 0; i < data.Length; i++)
                 data[i] = new SlidingWindow<double>();
         }
 
         public void Read()
         {
 
-            while(!lastWindow && !Program.stop)
+            while (!lastWindow && !Program.stop)
             {
+
+                while (window.Count < window.Size() && !lastWindow && !Program.stop)
+                {
+                    var p = packetQueue.GetNextElement();
+
+                    if (p != null)
+                    {
+                        if (p.IsLastPacket)
+                            lastWindow = true;
+                        else
+                            window.Add(p);
+                    }
+                }
+
                 if (!Program.stop) // lo so che non ha senso 
                 {
-                    while (window.Count < window.Size() && !lastWindow && !Program.stop)
-                    {
-                        var p = packetQueue.GetNextElement();
-
-                        if (p != null)
-                        {
-                            if (p.IsLastPacket)
-                                lastWindow = true;
-                            else
-                                window.Add(p);
-                        }
-                    }
-
                     Analyze();
 
                     firstWindow = false;
@@ -71,7 +72,7 @@ namespace ProgettoCS
 
 
             var i = firstWindow ? 0 : window.Size() / 2;
-            for(; i < window.Count; i++)
+            for (; i < window.Count; i++)
             {
                 p = window[i];
 
@@ -81,7 +82,7 @@ namespace ProgettoCS
 
                 // Theta
                 data[1].Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
-               // provaColella.Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
+                // provaColella.Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
 
                 // Yaw
                 data[2].Add(Functions.Yaw(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
@@ -93,6 +94,7 @@ namespace ProgettoCS
                 data[4].Add(Functions.Roll(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
             }
 
+            i = firstWindow ? 0 : window.Size() / 2;
 
             // array pieno, Analizza
             int range = 20;
@@ -101,10 +103,10 @@ namespace ProgettoCS
 
             int cacca = firstWindow ? 0 : data[0].Size() / 2 - range;
 
-
             Functions.RemoveDiscontinuity(data[1]);
             Functions.RemoveDiscontinuity(data[2]);
             Functions.RemoveDiscontinuity(data[4]);
+
             List<double> tempT = data[1].GetRange(start, data[1].Count - start);
             List<double> smoothedTheta = Functions.Smooth(tempT, range);
 
@@ -124,11 +126,11 @@ namespace ProgettoCS
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { stdDevAcc[j]/*smoothedAcc[j]*/, data[0][cacca], data[2][cacca], smoothedYaw[j] });
+                pointsQueue.EnqueueElement(new double[] { stdDevAcc[j]/*smoothedAcc[j]*/, data[0][cacca], data[1][cacca], smoothedTheta[j] });
                 cacca++;
             }
 
-            for(var k = 0; k < data.Length; k++)
+            for (var k = 0; k < data.Length; k++)
                 data[k].UpdateWindow();
 
 

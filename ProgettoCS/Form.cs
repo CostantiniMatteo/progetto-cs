@@ -91,16 +91,7 @@ namespace ProgettoCS
         public void Draw()
         {
             Color c = Color.Red;
-            var ppl = new PointPairList[4];
             double x = 0;
-
-            removeAllGraphs();
-
-            for (int i = 0; i < ppl.Length; i++)
-            {
-                ppl[i] = new PointPairList();
-            }
-
 
             while (!Program.stop)
             {
@@ -110,23 +101,23 @@ namespace ProgettoCS
                 {
                     for (int i = 0; i < points.Length; i++)
                     {
-                        //ppl[i].Add(x, points[i]);
 
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
 
                         // questa cosa è un po' bruttina, infatti andrà spostata nell'Analyzer
-                        // era solo per vedere se funzionava
+                        // era solo per vedere che funzionasse
                         if (i == 0 && points[i] < 0.60)
-                           c = Color.Blue;
+                            c = Color.Blue;
                         else
-                           c = Color.Red;
+                            c = Color.Red;
 
                     }
 
-                    Thread.Sleep(10);
+                    Thread.Sleep(15);
                     x += 0.02;
                 }
             }
+            
 
         }
 
@@ -165,7 +156,10 @@ namespace ProgettoCS
             {
                 ZedGraphControl z = (ZedGraphControl)zedList.ElementAt(i);
                 z.GraphPane.CurveList.Clear();
+                z.AxisChange();
+                z.Invalidate();
             }
+
 
         }
 
@@ -187,9 +181,11 @@ namespace ProgettoCS
             button2.Enabled = false;
 
             Program.StopThreads();
+
             removeAllGraphs();
+
             Program.StartThreads();
-            
+
             button2.Enabled = true;
         }
 

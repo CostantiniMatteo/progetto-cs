@@ -77,11 +77,21 @@ namespace ProgettoCS
             return Math.Sqrt(res / (e - s));
         }
 
-        public static double FunzioneOrientamento(double z, double y)
+        public static void RadiansToDegrees(SlidingWindow<double> data, int s = 0, int e = -1)
         {
-            return Math.Atan(y / z);
+            e = e < 0 ? data.Count : e;
+
+            for (int i = s; i < e; i++)
+            {
+                data[i] = data[i] * 180 / Math.PI;
+            }
         }
 
+        public static double FunzioneOrientamento(double z, double y)
+        {
+            return Math.Atan2(y, z);
+        }
+        
         public static void RemoveDiscontinuity(SlidingWindow<double> data)
         {
 
@@ -91,12 +101,12 @@ namespace ProgettoCS
 
                 int alfa = Convert.ToInt32(Math.Abs(height / Math.PI));
 
-                if (height > 2.4)
+                if (height > 1.9)
                 {
                     data[i] = data[i] - alfa * Math.PI;
 
                 }
-                else if (height < -2.4)
+                else if (height < -1.9)
                 {
                     data[i] = data[i] + alfa * Math.PI;
                 }
