@@ -45,6 +45,10 @@ namespace ProgettoCS
             return queue.IsEmpty;
         }
 
+        public void RemoveAllElements()
+        {
+            queue = new ConcurrentQueue<Packet>();
+        }
 
     }
 }

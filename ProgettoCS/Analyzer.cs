@@ -39,23 +39,27 @@ namespace ProgettoCS
 
             while(!lastWindow && !Program.stop)
             {
-                while(window.Count < window.Size() && !lastWindow && !Program.stop)
+                if (!Program.stop) // lo so che non ha senso 
                 {
-                    var p = packetQueue.GetNextElement();
-
-                    if(p != null)
+                    while (window.Count < window.Size() && !lastWindow && !Program.stop)
                     {
-                        if(p.IsLastPacket)
-                            lastWindow = true;
-                        else
-                            window.Add(p);
+                        var p = packetQueue.GetNextElement();
+
+                        if (p != null)
+                        {
+                            if (p.IsLastPacket)
+                                lastWindow = true;
+                            else
+                                window.Add(p);
+                        }
                     }
+
+                    Analyze();
+
+                    firstWindow = false;
+
+                    window.UpdateWindow();
                 }
-                Analyze();
-
-                firstWindow = false;
-
-                window.UpdateWindow();
             }
 
         }
@@ -91,7 +95,7 @@ namespace ProgettoCS
 
 
             // array pieno, Analizza
-            int range = 10;
+            int range = 20;
             int start = firstWindow ? 0 : data[0].Size() / 2 - 2 * range;
 
 
@@ -106,6 +110,7 @@ namespace ProgettoCS
 
             List<double> tempA = data[0].GetRange(start, data[0].Count - start);
             List<double> smoothedAcc = Functions.Smooth(tempA, range);
+            List<double> stdDevAcc = Functions.StdDev(tempA, range);
 
 
             List<double> tempY = data[2].GetRange(start, data[2].Count - start);
@@ -119,7 +124,7 @@ namespace ProgettoCS
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { data[4][cacca]/*smoothedAcc[j]*/, data[3][cacca], data[2][cacca], smoothedYaw[j] });
+                pointsQueue.EnqueueElement(new double[] { stdDevAcc[j]/*smoothedAcc[j]*/, data[0][cacca], data[2][cacca], smoothedYaw[j] });
                 cacca++;
             }
 

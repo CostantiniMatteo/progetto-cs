@@ -15,7 +15,8 @@ namespace ProgettoCS {
         private static Listener l;
         private static Form f;
         private static Analyzer a;
-        
+        private static PacketQueue packetQueue;
+        private static PointsQueue pointsQueue;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,8 +25,8 @@ namespace ProgettoCS {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            PacketQueue packetQueue = new PacketQueue();
-            PointsQueue pointsQueue = new PointsQueue();
+            packetQueue = new PacketQueue();
+            pointsQueue = new PointsQueue();
 
             l = new Listener(packetQueue);
             f = new Form(pointsQueue);
@@ -44,9 +45,14 @@ namespace ProgettoCS {
         {
             while (listenerThread.IsAlive || analyzerThread.IsAlive || drawThread.IsAlive) ;
 
+            a = new Analyzer(f, packetQueue, pointsQueue);
+
             listenerThread = new Thread(l.Parse);
             analyzerThread = new Thread(a.Read);
             drawThread = new Thread(f.Draw);
+
+            pointsQueue.RemoveAllElements();
+            packetQueue.RemoveAllElements();
 
             stop = false;
 
@@ -57,7 +63,10 @@ namespace ProgettoCS {
 
         public static void StopThreads()
         {
-            stop = true;
+            lock (new object())
+            {
+                stop = true;
+            }
         }
     }
 }

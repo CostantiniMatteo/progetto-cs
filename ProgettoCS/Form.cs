@@ -38,7 +38,7 @@ namespace ProgettoCS
             accelerometerGraph.YAxis.Title.Text = "m/s²";
             accelerometerGraph.XAxis.Title.Text = "second";
 
-            gyroscopeGraph.YAxis.Title.Text = "Grade";
+            gyroscopeGraph.YAxis.Title.Text = "m/s²";
             gyroscopeGraph.XAxis.Title.Text = "second";
 
             magnetometerGraph.YAxis.Title.Text = "π";
@@ -52,8 +52,8 @@ namespace ProgettoCS
             magnetometerGraph.IsFontsScaled = false;
             magnetometerDiscGraph.IsFontsScaled = false;
 
-            accelerometerGraph.Title.Text = "Roll";
-            gyroscopeGraph.Title.Text = "Pitch";
+            accelerometerGraph.Title.Text = "Deviazione Standard Acc";
+            gyroscopeGraph.Title.Text = "Accelerazione";
             magnetometerGraph.Title.Text = "Yaw";
             magnetometerDiscGraph.Title.Text = "Yaw smotato";
 
@@ -94,6 +94,8 @@ namespace ProgettoCS
             var ppl = new PointPairList[4];
             double x = 0;
 
+            removeAllGraphs();
+
             for (int i = 0; i < ppl.Length; i++)
             {
                 ppl[i] = new PointPairList();
@@ -109,37 +111,23 @@ namespace ProgettoCS
                     for (int i = 0; i < points.Length; i++)
                     {
                         //ppl[i].Add(x, points[i]);
-                        //c = segmentation(ppl[i]);
 
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
+
+                        // questa cosa è un po' bruttina, infatti andrà spostata nell'Analyzer
+                        // era solo per vedere se funzionava
+                        if (i == 0 && points[i] < 0.60)
+                           c = Color.Blue;
+                        else
+                           c = Color.Red;
+
                     }
 
-                    Thread.Sleep(5);
+                    Thread.Sleep(10);
                     x += 0.02;
                 }
             }
 
-        }
-
-        // Prova
-        private Color Segmentation(PointPairList ppl)
-        {
-            Color c = Color.Red;
-            int size = ppl.Count;
-            if (size > 4)
-            {
-                double x = ppl[size - 1].X;
-                double y = ppl[size - 1].Y;
-                double oldX = ppl[size - 2].X;
-                double oldY = ppl[size - 2].Y;
-                double incrRapp = (y - oldY) / (x - oldY);
-
-                if (y > 9.60 && y < 10.0 && incrRapp < 40 && incrRapp > -40)
-                    c = Color.Blue;
-                else
-                    c = Color.Red;
-            }
-            return c;
         }
 
         private void UpgradeGraph(ZedGraphControl z, double x, double y, Color c)
@@ -169,6 +157,103 @@ namespace ProgettoCS
             z.AxisChange();
             z.Invalidate();
         }
+
+        private void removeAllGraphs()
+        {
+
+            for (int i = 0; i < zedList.Count(); i++)
+            {
+                ZedGraphControl z = (ZedGraphControl)zedList.ElementAt(i);
+                z.GraphPane.CurveList.Clear();
+            }
+
+        }
+
+        //EVENTI
+
+        private void Form_Load(object sender, EventArgs e)
+        {
+            comboBox1.DisplayMember = "Name";
+
+            for (int i = 0; i < zedList.Count(); i++)
+            {
+                comboBox1.Items.Add(zedList.ElementAt(i));
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            button2.Enabled = false;
+
+            Program.StopThreads();
+            removeAllGraphs();
+            Program.StartThreads();
+            
+            button2.Enabled = true;
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox1.Enabled = true;
+            textBox2.Enabled = true;
+            textBox3.Enabled = true;
+            textBox4.Enabled = true;
+        }
+
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "")
+            {
+                double minX = Convert.ToDouble(textBox1.Text);
+                double maxX = Convert.ToDouble(textBox2.Text);
+                double minY = Convert.ToDouble(textBox3.Text);
+                double maxY = Convert.ToDouble(textBox4.Text);
+
+                if (minX < maxX || minY < maxY)
+                {
+                    for (int i = 0; i < zedList.Count(); i++)
+                    {
+                        ZedGraphControl zed = (ZedGraphControl)comboBox1.SelectedItem;
+
+                        GraphPane myPane = zed.GraphPane;
+                        myPane.XAxis.Scale.Min = minX;
+                        myPane.XAxis.Scale.Max = maxX;
+                        myPane.YAxis.Scale.Min = minY;
+                        myPane.YAxis.Scale.Max = maxY;
+
+                        myPane.AxisChange();
+                        zed.Invalidate();
+
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid numbers");
+                }
+            }
+        }
+
+        private void textBox_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "[^0-9]"))
+            {
+                ((TextBox)sender).Text = "";
+                MessageBox.Show("Please enter only numbers.");
+            }
+        }
+
+        public IEnumerable<Control> GetAll(Control control, Type type)
+        {
+            var controls = control.Controls.Cast<Control>();
+
+            return controls.SelectMany(ctrl => GetAll(ctrl, type))
+                                      .Concat(controls)
+                                      .Where(c => c.GetType() == type);
+        }
+
 
 
         /*
@@ -343,90 +428,5 @@ namespace ProgettoCS
             
         }*/
 
-        //EVENTI
-
-        private void Form_Load(object sender, EventArgs e)
-        {
-            comboBox1.DisplayMember = "Name";
-
-            for (int i = 0; i < zedList.Count(); i++)
-            {
-                comboBox1.Items.Add(zedList.ElementAt(i));
-            }
-
-        }
-
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            textBox1.Enabled = true;
-            textBox2.Enabled = true;
-            textBox3.Enabled = true;
-            textBox4.Enabled = true;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Program.StopThreads();
-
-            Program.StartThreads();
-
-            for (int i = 0; i < zedList.Count(); i++)
-            {
-                ZedGraphControl z = (ZedGraphControl)zedList.ElementAt(i);
-                z.GraphPane.CurveList.Clear();
-            }
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "")
-            {
-                double minX = Convert.ToDouble(textBox1.Text);
-                double maxX = Convert.ToDouble(textBox2.Text);
-                double minY = Convert.ToDouble(textBox3.Text);
-                double maxY = Convert.ToDouble(textBox4.Text);
-
-                if (minX < maxX || minY < maxY)
-                {
-                    for (int i = 0; i < zedList.Count(); i++)
-                    {
-                        ZedGraphControl zed = (ZedGraphControl)comboBox1.SelectedItem;
-
-                        GraphPane myPane = zed.GraphPane;
-                        myPane.XAxis.Scale.Min = minX;
-                        myPane.XAxis.Scale.Max = maxX;
-                        myPane.YAxis.Scale.Min = minY;
-                        myPane.YAxis.Scale.Max = maxY;
-
-                        myPane.AxisChange();
-                        zed.Invalidate();
-
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Invalid numbers");
-                }
-            }
-        }
-
-        private void textBox_TextChanged(object sender, EventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "[^0-9]"))
-            {
-                ((TextBox)sender).Text = "";
-                MessageBox.Show("Please enter only numbers.");
-            }
-        }
-
-        public IEnumerable<Control> GetAll(Control control, Type type)
-        {
-            var controls = control.Controls.Cast<Control>();
-
-            return controls.SelectMany(ctrl => GetAll(ctrl, type))
-                                      .Concat(controls)
-                                      .Where(c => c.GetType() == type);
-        }
     }
 }

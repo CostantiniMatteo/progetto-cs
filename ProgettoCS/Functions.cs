@@ -51,13 +51,13 @@ namespace ProgettoCS
 
         }
 
-        public static double[] StdDev(List<double> data, int range)
+        public static List<double> StdDev(List<double> data, int range)
         {
-            var res = new double[data.Count];
-            double mean = Mean(data);
+            var res = new List<double>(data.Count);
+            double mean = Mean(data, 0, data.Count - 1);
 
             for (var i = range; i < data.Count - range; i++)
-                res[i] = _stdDev(data, i - range, i + range);
+                res.Add(_stdDev(data, i - range, i + range));
 
             return res;
 
