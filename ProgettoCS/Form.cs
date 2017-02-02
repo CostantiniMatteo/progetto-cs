@@ -52,10 +52,10 @@ namespace ProgettoCS
             magnetometerGraph.IsFontsScaled = false;
             magnetometerDiscGraph.IsFontsScaled = false;
 
-            accelerometerGraph.Title.Text = "Deviazione Standard Acc";
-            gyroscopeGraph.Title.Text = "Accelerazione";
-            magnetometerGraph.Title.Text = "Yaw";
-            magnetometerDiscGraph.Title.Text = "Yaw smotato";
+            accelerometerGraph.Title.Text = "Accelerometro non smutato accelerazione";
+            gyroscopeGraph.Title.Text = "Accelerazione smutata però ci serve aspetta vabbè metti accelerazione smutata ti spacco la faccia";
+            magnetometerGraph.Title.Text = "Il terzo è il terzo è il terzo è il terzo è hahaha il terzo è teta hahaha";
+            magnetometerDiscGraph.Title.Text = "Smuted teta sisi dai scrivi muoviti";
 
             accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
             accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
@@ -101,16 +101,7 @@ namespace ProgettoCS
                 {
                     for (int i = 0; i < points.Length; i++)
                     {
-
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
-
-                        // questa cosa è un po' bruttina, infatti andrà spostata nell'Analyzer
-                        // era solo per vedere che funzionasse
-                        if (i == 0 && points[i] < 0.60)
-                            c = Color.Blue;
-                        else
-                            c = Color.Red;
-
                     }
 
                     Thread.Sleep(15);

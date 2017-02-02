@@ -18,8 +18,6 @@ namespace ProgettoCS
 
         SlidingWindow<double>[] data;
 
-        List<double> provaColella;
-
 
         public Analyzer(Form f, PacketQueue packetQueue, PointsQueue pointsQueue)
         {
@@ -28,7 +26,7 @@ namespace ProgettoCS
             this.packetQueue = packetQueue;
             this.pointsQueue = pointsQueue;
             this.firstWindow = true;
-            this.data = new SlidingWindow<double>[5];
+            this.data = new SlidingWindow<double>[6];
             //  this.provaColella = new List<double>();
             for (var i = 0; i < data.Length; i++)
                 data[i] = new SlidingWindow<double>();
@@ -92,6 +90,9 @@ namespace ProgettoCS
 
                 // Roll
                 data[4].Add(Functions.Roll(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
+
+                // Asse Y Accelerometro
+                data[5].Add(p.GetAccX(0));
             }
 
             i = firstWindow ? 0 : window.Size() / 2;
@@ -101,7 +102,7 @@ namespace ProgettoCS
             int start = firstWindow ? 0 : data[0].Size() / 2 - 2 * range;
 
 
-            int cacca = firstWindow ? 0 : data[0].Size() / 2 - range;
+            int peppinoDiCaprio = firstWindow ? 0 : data[0].Size() / 2 - range;
 
             Functions.RemoveDiscontinuity(data[1]);
             Functions.RemoveDiscontinuity(data[2]);
@@ -118,16 +119,21 @@ namespace ProgettoCS
             List<double> tempY = data[2].GetRange(start, data[2].Count - start);
             List<double> smoothedYaw = Functions.Smooth(tempY, range);
 
+            List<double> tempAccX = data[5].GetRange(start, data[5].Count - start);
+            List<double> smoothedAccX = Functions.Smooth(tempAccX, range);
+            List<int> lss = Functions.sucaStoLayLaySitSitStand(smoothedAccX);
+
             /*foreach (var d in smoothedAcc)
             {
                 pointsQueue.EnqueueElement(new double[] { d, modAcc[cacca] });
                 cacca++;
             }*/
 
+
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { stdDevAcc[j]/*smoothedAcc[j]*/, data[0][cacca], data[1][cacca], smoothedTheta[j] });
-                cacca++;
+                pointsQueue.EnqueueElement(new double[] { data[0][peppinoDiCaprio], smoothedAcc[j], /*data[1][peppinoDiCaprio]*/ tempAccX[j], /*smoothedTheta[j]*/lss[j] });
+                peppinoDiCaprio++;
             }
 
             for (var k = 0; k < data.Length; k++)

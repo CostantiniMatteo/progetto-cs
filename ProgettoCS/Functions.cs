@@ -114,6 +114,39 @@ namespace ProgettoCS
 
         }
 
+
+        // x < 2.7 : lay; 2.7 <= x < 3.7 : lay/sit; 3.7 <= x < 7 : sit; x >= 7 : stand; 
+        // 0 : lay
+        // 1 : lay/sit
+        // 2 : sit
+        // 3 : stand
+        public static List<int> sucaStoLayLaySitSitStand(List<double> data)
+        {
+            var lss = new List<int>(data.Count);
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i] < 2.7)
+                {
+                    lss.Add(0);
+                } else if (data[i] < 3.7 && data[i] >= 2.7)
+                {
+                    lss.Add(1);
+                } else if (data[i] < 7 && data[i] >= 3.7)
+                {
+                    lss.Add(2);
+                } else
+                {
+                    lss.Add(3);
+                }
+            }
+
+            return lss;
+        }
+
+
+
+
         public static double Yaw(double q0, double q1, double q2, double q3)
         {
             return Math.Atan((2 * q1 * q2 + 2 * q0 * q3) / (q0 * q0 * 2 + 2 * q1 * q1 - 1));
