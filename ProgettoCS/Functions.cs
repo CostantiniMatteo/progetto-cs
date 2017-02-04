@@ -30,7 +30,7 @@ namespace ProgettoCS
             double res = 0;
             for (var i = s; i <= e; i++)
                 res += data[i];
-            return res / (e - s);
+            return res / (e - s + 1);
         }
 
 
@@ -126,13 +126,13 @@ namespace ProgettoCS
 
             for (int i = 0; i < data.Count; i++)
             {
-                if (data[i] < 2.7)
+                if (data[i] < 2.9)
                 {
                     lss.Add(0);
-                } else if (data[i] < 3.7 && data[i] >= 2.7)
+                } else if (data[i] < 3.7 && data[i] >= 2.9)
                 {
                     lss.Add(1);
-                } else if (data[i] < 7 && data[i] >= 3.7)
+                } else if (data[i] < 8.2 && data[i] >= 3.7)
                 {
                     lss.Add(2);
                 } else
@@ -144,7 +144,19 @@ namespace ProgettoCS
             return lss;
         }
 
-
+        public static void laySitBello(List<int> data, int window = 20)
+        {
+            for (var i = window + 1; i < data.Count - window; i++)
+            {
+                if (data[i - window] == data[i + window] && data[i] != data[i - window])
+                {
+                    for (var j = i - window; j < i + window; j++)
+                    {
+                        data[j] = data[i - window];
+                    }
+                }
+            }
+        } 
 
 
         public static double Yaw(double q0, double q1, double q2, double q3)

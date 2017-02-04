@@ -98,11 +98,11 @@ namespace ProgettoCS
             i = firstWindow ? 0 : window.Size() / 2;
 
             // array pieno, Analizza
-            int range = 20;
+            int range = 10;
             int start = firstWindow ? 0 : data[0].Size() / 2 - 2 * range;
 
 
-            int peppinoDiCaprio = firstWindow ? 0 : data[0].Size() / 2 - range;
+            int peppinoDiCapri = firstWindow ? 0 : data[0].Size() / 2 - range;
 
             Functions.RemoveDiscontinuity(data[1]);
             Functions.RemoveDiscontinuity(data[2]);
@@ -122,18 +122,13 @@ namespace ProgettoCS
             List<double> tempAccX = data[5].GetRange(start, data[5].Count - start);
             List<double> smoothedAccX = Functions.Smooth(tempAccX, range);
             List<int> lss = Functions.sucaStoLayLaySitSitStand(smoothedAccX);
-
-            /*foreach (var d in smoothedAcc)
-            {
-                pointsQueue.EnqueueElement(new double[] { d, modAcc[cacca] });
-                cacca++;
-            }*/
+            Functions.laySitBello(lss);
 
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { data[0][peppinoDiCaprio], smoothedAcc[j], /*data[1][peppinoDiCaprio]*/ tempAccX[j], /*smoothedTheta[j]*/lss[j] });
-                peppinoDiCaprio++;
+                pointsQueue.EnqueueElement(new double[] { data[0][peppinoDiCapri], smoothedAcc[j], /*data[1][peppinoDiCapri]*/ tempAccX[j], /*smoothedTheta[j]*/lss[j] });
+                peppinoDiCapri++;
             }
 
             for (var k = 0; k < data.Length; k++)
