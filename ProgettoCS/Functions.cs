@@ -34,7 +34,7 @@ namespace ProgettoCS
         }
 
 
-        public static double Modulus(double v1, double v2, double v3)
+        public static double Modulus(double v1, double v2, double v3 = 0)
         {
             return Math.Sqrt(v1 * v1 + v2 * v2 + v3 * v3);
         }
@@ -172,6 +172,35 @@ namespace ProgettoCS
         public static double Roll(double q0, double q1, double q2, double q3)
         {
             return Math.Atan((2 * q2 * q3 + 2 * q0 * q1) / (2 * q0 * q0 + 2 * q3 * q3 - 1));
+        }
+
+        public static double motoStazionario(double devStd)
+        {
+            int sogliola = 4;
+            int sogliola2 = 5;
+
+            if (devStd < sogliola) return 0;
+            else if (devStd < sogliola2) return 3; // m/s CAMMINO
+            else return 6; // m/s TROTTO
+        }
+
+        public static List<List<double>> deadReckoning(List<double> devStd, List<double> ayaws)
+        {
+            var result = new List<List<double>>(devStd.Count);
+            result[0].Add(0);
+            result[1].Add(0); //AHAH
+            for (var i = 0; i < devStd.Count; i++)
+            {// FIGLIO DI PUTTANA
+                double velocita = motoStazionario(i);
+                double spostamento = velocita * 0.02; //secondi
+
+                result[0].Add(result[0][i] + spostamento * Math.Cos(ayaws[i]));
+                result[1].Add(result[1][i] + spostamento * Math.Sin(ayaws[i]));
+            }
+
+            // DIOCANE TUA MADRE
+            return result;
+           
         }
     }
 }

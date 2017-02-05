@@ -26,8 +26,7 @@ namespace ProgettoCS
             this.packetQueue = packetQueue;
             this.pointsQueue = pointsQueue;
             this.firstWindow = true;
-            this.data = new SlidingWindow<double>[6];
-            //  this.provaColella = new List<double>();
+            this.data = new SlidingWindow<double>[7];
             for (var i = 0; i < data.Length; i++)
                 data[i] = new SlidingWindow<double>();
         }
@@ -75,14 +74,13 @@ namespace ProgettoCS
                 p = window[i];
 
                 // Modulo accelerometro
-                data[0].Add(Functions.Modulus(p.GetAccX(0),
-                    p.GetAccY(0), p.GetAccZ(0)));
+                data[0].Add(Functions.Modulus(p.GetAccX(0), p.GetAccY(0), p.GetAccZ(0)));
 
                 // Theta
                 data[1].Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
                 // provaColella.Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
 
-                // Yaw
+                // AYaw
                 data[2].Add(Functions.Yaw(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
 
                 // Pitch
@@ -93,6 +91,9 @@ namespace ProgettoCS
 
                 // Asse Y Accelerometro
                 data[5].Add(p.GetAccX(0));
+
+                // Accelerazione su piano orizzonatale
+                data[6].Add(Functions.Modulus(p.GetAccY(0), p.GetAccZ(0)));
             }
 
             i = firstWindow ? 0 : window.Size() / 2;
@@ -102,7 +103,7 @@ namespace ProgettoCS
             int start = firstWindow ? 0 : data[0].Size() / 2 - 2 * range;
 
 
-            int peppinoDiCapri = firstWindow ? 0 : data[0].Size() / 2 - range;
+            int aDarioPiaceLungo = firstWindow ? 0 : data[0].Size() / 2 - range;
 
             Functions.RemoveDiscontinuity(data[1]);
             Functions.RemoveDiscontinuity(data[2]);
@@ -122,20 +123,26 @@ namespace ProgettoCS
             List<double> tempAccX = data[5].GetRange(start, data[5].Count - start);
             List<double> smoothedAccX = Functions.Smooth(tempAccX, range);
             List<int> lss = Functions.sucaStoLayLaySitSitStand(smoothedAccX);
+            List<int> lss2 = Functions.sucaStoLayLaySitSitStand(smoothedAccX);
             Functions.laySitBello(lss);
+
+            List<double> tempAV = data[6].GetRange(start, data[6].Count - start);
+            List<double> smoothedAccV = Functions.Smooth(tempA, range);
+            List<double> stdDevAccV = Functions.StdDev(tempA, range);
+            List<List<double>> tUamaArdere = Functions.deadReckoning(stdDevAccV, smoothedYaw);
 
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { data[0][peppinoDiCapri], smoothedAcc[j], /*data[1][peppinoDiCapri]*/ tempAccX[j], /*smoothedTheta[j]*/lss[j] });
-                peppinoDiCapri++;
+                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][aDarioPiaceLungo]*/, lss2[j]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ tempAccX[j], /*smoothedTheta[j]lss[j]*/ tUamaArdere[INDICEINCREDIBILE] });
+                aDarioPiaceLungo++;
             }
 
             for (var k = 0; k < data.Length; k++)
                 data[k].UpdateWindow();
 
 
-
+            
 
         }
 
