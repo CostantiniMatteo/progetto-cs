@@ -180,17 +180,22 @@ namespace ProgettoCS
             int sogliola2 = 5;
 
             if (devStd < sogliola) return 0;
-            else if (devStd < sogliola2) return 3; // m/s CAMMINO
-            else return 6; // m/s TROTTO
+            else if (devStd < sogliola2) return 3; // m/s Cammino
+            else return 6; // m/s Corsa
         }
 
-        public static List<List<double>> deadReckoning(List<double> devStd, List<double> ayaws)
+        public static List<List<double>> deadReckoning(List<double> devStd, List<double> ayaws, double lastX, double lastY)
         {
             var result = new List<List<double>>(devStd.Count);
-            result[0].Add(0);
-            result[1].Add(0); //AHAH
+
+            result.Add(new List<double>());
+            result.Add(new List<double>());
+
+            result[0].Add(lastX);
+            result[1].Add(lastY); 
+
             for (var i = 0; i < devStd.Count; i++)
-            {// FIGLIO DI PUTTANA
+            {
                 double velocita = motoStazionario(i);
                 double spostamento = velocita * 0.02; //secondi
 
@@ -198,7 +203,6 @@ namespace ProgettoCS
                 result[1].Add(result[1][i] + spostamento * Math.Sin(ayaws[i]));
             }
 
-            // DIOCANE TUA MADRE
             return result;
            
         }

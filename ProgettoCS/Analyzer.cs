@@ -15,7 +15,7 @@ namespace ProgettoCS
         private SlidingWindow<Packet> window;
         private bool firstWindow;
         private bool lastWindow;
-
+        private double lastX, lastY;
         SlidingWindow<double>[] data;
 
 
@@ -29,6 +29,8 @@ namespace ProgettoCS
             this.data = new SlidingWindow<double>[7];
             for (var i = 0; i < data.Length; i++)
                 data[i] = new SlidingWindow<double>();
+            this.lastX = 0;
+            this.lastY = 0;
         }
 
         public void Read()
@@ -101,9 +103,9 @@ namespace ProgettoCS
             // array pieno, Analizza
             int range = 10;
             int start = firstWindow ? 0 : data[0].Size() / 2 - 2 * range;
+            
 
-
-            int aDarioPiaceLungo = firstWindow ? 0 : data[0].Size() / 2 - range;
+            int start2 = firstWindow ? 0 : data[0].Size() / 2 - range;
 
             Functions.RemoveDiscontinuity(data[1]);
             Functions.RemoveDiscontinuity(data[2]);
@@ -129,13 +131,15 @@ namespace ProgettoCS
             List<double> tempAV = data[6].GetRange(start, data[6].Count - start);
             List<double> smoothedAccV = Functions.Smooth(tempA, range);
             List<double> stdDevAccV = Functions.StdDev(tempA, range);
-            List<List<double>> tUamaArdere = Functions.deadReckoning(stdDevAccV, smoothedYaw);
+            List<List<double>> deadReckoningList = Functions.deadReckoning(stdDevAccV, smoothedYaw, lastX, lastY);
 
+            lastX = deadReckoningList[0][deadReckoningList[0].Count - 1];
+            lastY = deadReckoningList[1][deadReckoningList[0].Count - 1];
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][aDarioPiaceLungo]*/, lss2[j]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ tempAccX[j], /*smoothedTheta[j]lss[j]*/ tUamaArdere[INDICEINCREDIBILE] });
-                aDarioPiaceLungo++;
+                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][start2]*/, lss2[j]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ tempAccX[j], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
+                start2++;
             }
 
             for (var k = 0; k < data.Length; k++)

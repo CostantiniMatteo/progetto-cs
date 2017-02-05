@@ -22,13 +22,21 @@ namespace ProgettoCS
         private GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, magnetometerDiscGraph;
         private PointsQueue pointsQueue;
         private IEnumerable<Control> zedList;
+        private IEnumerable<Control> groupBoxList;
+        private int lastLss;
+        private int groupBoxCount;
+        private double lastTime;
 
         public Form(PointsQueue pq)
         {
             InitializeComponent();
             Resize();
+            groupBoxCount = 3;
+            lastTime = 0;
+            
             zedList = GetAll(this, typeof(ZedGraphControl));
             zedList = zedList.OrderBy(ZedGraphControl => ZedGraphControl.Name);
+
 
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
@@ -92,6 +100,7 @@ namespace ProgettoCS
         {
             Color c = Color.Red;
             double x = 0;
+            lastTime = 0;
 
             while (!Program.stop)
             {
@@ -99,16 +108,86 @@ namespace ProgettoCS
 
                 if (points != null && !Program.stop)
                 {
-                    for (int i = 0; i < points.Length; i++)
+                    for (int i = 0; i < points.Length - 3 ; i++)
                     {
                         UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
                     }
+
+                    generateGroupBox(points[3], x);
+
+                    lastLss = (int)points[3];
+
+                    UpgradeGraph((ZedGraphControl)zedList.ElementAt(3), points[4], points[5], c);
+
 
                     Thread.Sleep(15);
                     x += 0.02;
                 }
             }
             
+
+        }
+
+        private void generateGroupBox(double p, double x)
+        {
+            if (p != lastLss && lastTime != x )
+            {
+                GroupBox gbx = new GroupBox();
+                PictureBox pic = new PictureBox();
+                System.Windows.Forms.Label l1, l2;
+
+                pic.SizeMode = PictureBoxSizeMode.StretchImage;
+                pic.Image = Image.FromFile("../Pics/stand.bmp");
+                pic.Location = new System.Drawing.Point(6, 17);
+                pic.Size = new System.Drawing.Size(90, 90);
+                pic.TabIndex = 1;
+                pic.TabStop = false;
+
+                switch (lastLss)
+                {
+                    case 0:
+                        pic.Image = Image.FromFile("../Pics/lay.jpg");
+                        break;
+                    case 1:
+                        pic.Image = Image.FromFile("../Pics/laysit.bmp");
+                        break;
+                    case 2:
+                        pic.Image = Image.FromFile("../Pics/sit.bmp");
+                        break;
+                    case 3:
+                        pic.Image = Image.FromFile("../Pics/stand.bmp");
+                        break;
+                }
+
+                l2 = new System.Windows.Forms.Label();
+                l1 = new System.Windows.Forms.Label();
+
+                l1.Location = new System.Drawing.Point(102, 17);
+                l1.TabIndex = 0;
+                l1.Text = "from: "+ Math.Round(lastTime, 2) + " sec";
+
+                l2.Location = new System.Drawing.Point(102, 61);
+                l2.TabIndex = 2;
+                l2.Text = "to: " + Math.Round(x, 2) + " sec";
+
+                gbx.Controls.Add(l1);
+                gbx.Controls.Add(l2);
+                gbx.Controls.Add(pic);
+                gbx.Size = new System.Drawing.Size(185, 111);
+                gbx.TabIndex = 2;
+                gbx.TabStop = false;
+                gbx.Name = "groupBox" + (groupBoxCount + 1);
+                gbx.Visible = true;
+
+                this.Invoke((MethodInvoker)delegate ()
+                {
+                    flowLayoutPanel1.Controls.Add(gbx);
+                    flowLayoutPanel1.Refresh();
+                });
+
+                lastTime = x;
+                
+            }
 
         }
 
@@ -151,6 +230,10 @@ namespace ProgettoCS
                 z.Invalidate();
             }
 
+            groupBoxList = GetAll(this, typeof(GroupBox));
+            groupBoxList = groupBoxList.OrderBy(GroupBox => GroupBox.Name);
+
+            flowLayoutPanel1.Controls.Clear();
 
         }
 
@@ -187,8 +270,6 @@ namespace ProgettoCS
             textBox3.Enabled = true;
             textBox4.Enabled = true;
         }
-
-
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -240,7 +321,6 @@ namespace ProgettoCS
                                       .Concat(controls)
                                       .Where(c => c.GetType() == type);
         }
-
 
 
         /*
