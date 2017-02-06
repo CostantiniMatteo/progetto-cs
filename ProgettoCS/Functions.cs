@@ -120,7 +120,7 @@ namespace ProgettoCS
         // 1 : lay/sit
         // 2 : sit
         // 3 : stand
-        public static List<int> sucaStoLayLaySitSitStand(List<double> data)
+        public static List<int> lss(List<double> data)
         {
             var lss = new List<int>(data.Count);
 
@@ -132,7 +132,7 @@ namespace ProgettoCS
                 } else if (data[i] < 3.7 && data[i] >= 2.9)
                 {
                     lss.Add(1);
-                } else if (data[i] < 8.2 && data[i] >= 3.7)
+                } else if (data[i] < 7.4 && data[i] >= 3.7)
                 {
                     lss.Add(2);
                 } else
@@ -144,7 +144,7 @@ namespace ProgettoCS
             return lss;
         }
 
-        public static void laySitBello(List<int> data, int window = 20)
+        public static void lssMod(List<int> data, int window = 30)
         {
             for (var i = window + 1; i < data.Count - window; i++)
             {
@@ -176,15 +176,15 @@ namespace ProgettoCS
 
         public static double motoStazionario(double devStd)
         {
-            int sogliola = 4;
-            int sogliola2 = 5;
+            double sogliola = 0.5;
+            double sogliola2 = 4;
 
             if (devStd < sogliola) return 0;
             else if (devStd < sogliola2) return 3; // m/s Cammino
             else return 6; // m/s Corsa
         }
 
-        public static List<List<double>> deadReckoning(List<double> devStd, List<double> ayaws, double lastX, double lastY)
+        public static List<List<double>> deadReckoning(List<double> devStd, List<double> ayaws, List<int> laySitStand, double lastX, double lastY)
         {
             var result = new List<List<double>>(devStd.Count);
 
@@ -196,11 +196,22 @@ namespace ProgettoCS
 
             for (var i = 0; i < devStd.Count; i++)
             {
-                double velocita = motoStazionario(i);
+                double velocita = motoStazionario(devStd[i]);
                 double spostamento = velocita * 0.02; //secondi
 
                 result[0].Add(result[0][i] + spostamento * Math.Cos(ayaws[i]));
                 result[1].Add(result[1][i] + spostamento * Math.Sin(ayaws[i]));
+                /*
+                if (laySitStand[i] == 3)
+                {
+                    result[0].Add(result[0][i] + spostamento * Math.Cos(ayaws[i]));
+                    result[1].Add(result[1][i] + spostamento * Math.Sin(ayaws[i]));
+                } else
+                {
+                    result[0].Add(result[0][i]);
+                    result[1].Add(result[1][i]);
+                }*/
+                
             }
 
             return result;
