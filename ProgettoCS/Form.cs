@@ -26,6 +26,7 @@ namespace ProgettoCS
         private int lastLss;
         private int groupBoxCount;
         private double lastTime;
+        //StreamWriter writer = new StreamWriter("../output.csv");
 
         public Form(PointsQueue pq)
         {
@@ -33,6 +34,8 @@ namespace ProgettoCS
             Resize();
             groupBoxCount = 3;
             lastTime = 0;
+
+            File.Delete("../output.csv");
             
             zedList = GetAll(this, typeof(ZedGraphControl));
             zedList = zedList.OrderBy(ZedGraphControl => ZedGraphControl.Name);
@@ -143,19 +146,27 @@ namespace ProgettoCS
                 pic.TabIndex = 1;
                 pic.TabStop = false;
 
+                string action = "";
+                double from = Math.Round(lastTime, 2);
+                double to = Math.Round(x, 2);
+
                 switch (lastLss)
                 {
                     case 0:
                         pic.Image = Image.FromFile("../Pics/lay.jpg");
+                        action = "lay";
                         break;
                     case 1:
                         pic.Image = Image.FromFile("../Pics/laysit.bmp");
+                        action = "lay/sit";
                         break;
                     case 2:
                         pic.Image = Image.FromFile("../Pics/sit.bmp");
+                        action = "sit";
                         break;
                     case 3:
                         pic.Image = Image.FromFile("../Pics/stand.bmp");
+                        action = "stand";
                         break;
                 }
 
@@ -164,11 +175,13 @@ namespace ProgettoCS
 
                 l1.Location = new System.Drawing.Point(102, 17);
                 l1.TabIndex = 0;
-                l1.Text = "from: "+ Math.Round(lastTime, 2) + " sec";
+                l1.Text = "from: "+ from + " sec";
 
                 l2.Location = new System.Drawing.Point(102, 61);
                 l2.TabIndex = 2;
-                l2.Text = "to: " + Math.Round(x, 2) + " sec";
+                l2.Text = "to: " + to + " sec";
+
+                UpdateFile(action, from, to);
 
                 gbx.Controls.Add(l1);
                 gbx.Controls.Add(l2);
@@ -189,6 +202,13 @@ namespace ProgettoCS
                 
             }
 
+        }
+
+        private void UpdateFile(string action, double from, double to)
+        {
+            StreamWriter writer = File.AppendText("../output.csv");
+            writer.WriteLine(action + ";" + from + ";" + to);
+            writer.Close();
         }
 
         private void UpgradeGraph(ZedGraphControl z, double x, double y, Color c)
