@@ -10,10 +10,12 @@ namespace ProgettoCS
     public class PointsQueue
     {
         ConcurrentQueue<double[]> queue;
+        private bool lastWindow;
 
         public PointsQueue()
         {
             queue = new ConcurrentQueue<double[]>();
+            lastWindow = false;
         }
 
         public double[] GetNextElement()
@@ -38,6 +40,16 @@ namespace ProgettoCS
         public int Count
         {
             get { return queue.Count; }
+        }
+
+        public bool LastWindow
+        {
+            get { return lastWindow; }
+        }
+
+        public void SetLastWindow()
+        {
+            lastWindow = true;
         }
 
         public bool IsEmpty()

@@ -46,13 +46,15 @@ namespace ProgettoCS
                     if (p != null)
                     {
                         if (p.IsLastPacket)
+                        {
                             lastWindow = true;
+                        }
                         else
                             window.Add(p);
                     }
                 }
 
-                if (!Program.stop) // lo so che non ha senso 
+                if (!Program.stop)
                 {
                     Analyze();
 
@@ -80,7 +82,6 @@ namespace ProgettoCS
 
                 // Theta
                 data[1].Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
-                // provaColella.Add(Functions.FunzioneOrientamento(p.GetMagZ(0), p.GetMagY(0)));
 
                 // AYaw
                 data[2].Add(Functions.Yaw(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
@@ -139,9 +140,12 @@ namespace ProgettoCS
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][start2]*/, data[0][start2]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ data[5][start2], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
+                pointsQueue.EnqueueElement(new double[] { stdDevAccV[j]/*smoothedYaw[j]*//*data[2][start2]*/, data[0][start2]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ data[5][start2], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
                 start2++;
             }
+
+            if (lastWindow)
+                pointsQueue.SetLastWindow();
 
             for (var k = 0; k < data.Length; k++)
                 data[k].UpdateWindow();
