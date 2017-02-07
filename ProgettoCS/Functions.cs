@@ -176,12 +176,14 @@ namespace ProgettoCS
 
         public static double motoStazionario(double devStd)
         {
-            double sogliola = 0.5;
-            double sogliola2 = 4;
+            double soglia1 = 0.5;
+            double soglia2 = 1.5;
+            double soglia3 = 4;
 
-            if (devStd < sogliola) return 0;
-            else if (devStd < sogliola2) return 3; // m/s Cammino
-            else return 6; // m/s Corsa
+            if (devStd < soglia1) return 0;
+            else if (devStd < soglia2) return 1;
+            else if (devStd < soglia3) return 4;
+            else return 6;
         }
 
         public static List<List<double>> deadReckoning(List<double> devStd, List<double> ayaws, List<int> laySitStand, double lastX, double lastY)
@@ -197,10 +199,11 @@ namespace ProgettoCS
             for (var i = 0; i < devStd.Count; i++)
             {
                 double velocita = motoStazionario(devStd[i]);
-                double spostamento = velocita * 0.02; //secondi
-
+                double spostamento = velocita * 0.02;
+                
                 result[0].Add(result[0][i] + spostamento * Math.Cos(ayaws[i]));
                 result[1].Add(result[1][i] + spostamento * Math.Sin(ayaws[i]));
+                
                 /*
                 if (laySitStand[i] == 3)
                 {
@@ -210,8 +213,8 @@ namespace ProgettoCS
                 {
                     result[0].Add(result[0][i]);
                     result[1].Add(result[1][i]);
-                }*/
-                
+                }
+                */
             }
 
             return result;
