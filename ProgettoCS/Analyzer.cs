@@ -139,7 +139,7 @@ namespace ProgettoCS
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][start2]*/, data[0][start2]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ data[5][start2], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
+                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][start2]*/, lss[j]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ data[5][start2], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
                 start2++;
             }
 

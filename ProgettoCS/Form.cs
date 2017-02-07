@@ -63,10 +63,10 @@ namespace ProgettoCS
             magnetometerGraph.IsFontsScaled = false;
             magnetometerDiscGraph.IsFontsScaled = false;
 
-            accelerometerGraph.Title.Text = "Accelerometro non smutato accelerazione";
-            gyroscopeGraph.Title.Text = "Accelerazione smutata però ci serve aspetta vabbè metti accelerazione smutata ti spacco la faccia";
-            magnetometerGraph.Title.Text = "Il terzo è il terzo è il terzo è il terzo è hahaha il terzo è teta hahaha";
-            magnetometerDiscGraph.Title.Text = "Smuted teta sisi dai scrivi muoviti";
+            accelerometerGraph.Title.Text = "";
+            gyroscopeGraph.Title.Text = "";
+            magnetometerGraph.Title.Text = "";
+            magnetometerDiscGraph.Title.Text = "";
 
             accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
             accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
@@ -289,6 +289,11 @@ namespace ProgettoCS
             textBox2.Enabled = true;
             textBox3.Enabled = true;
             textBox4.Enabled = true;
+        }
+
+        private void zedGraphControl2_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void button1_Click(object sender, EventArgs e)
