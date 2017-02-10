@@ -26,7 +26,7 @@ namespace ProgettoCS
             this.packetQueue = packetQueue;
             this.pointsQueue = pointsQueue;
             this.firstWindow = true;
-            this.data = new SlidingWindow<double>[7];
+            this.data = new SlidingWindow<double>[8];
             for (var i = 0; i < data.Length; i++)
                 data[i] = new SlidingWindow<double>();
             this.lastX = 0;
@@ -91,11 +91,14 @@ namespace ProgettoCS
                 // Roll
                 data[4].Add(Functions.Roll(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
 
-                // Asse X Accelerometro
+                // Asse Y Accelerometro
                 data[5].Add(p.GetAccX(0));
 
                 // Accelerazione su piano orizzonatale
                 data[6].Add(Functions.Modulus(p.GetAccY(0), p.GetAccZ(0)));
+
+                // Modulo giroscopio
+                data[7].Add(Functions.Modulus(p.GetGyrX(0), p.GetGyrY(0), p.GetGyrY(0)));
             }
 
             i = firstWindow ? 0 : window.Size() / 2;
@@ -103,7 +106,7 @@ namespace ProgettoCS
             // array pieno, Analizza
             int range = 10;
             int start = firstWindow ? 0 : data[0].Size() / 2 - 2 * range;
-            
+
 
             int start2 = firstWindow ? 0 : data[0].Size() / 2 - range;
 
@@ -111,35 +114,43 @@ namespace ProgettoCS
             Functions.RemoveDiscontinuity(data[2]);
             Functions.RemoveDiscontinuity(data[4]);
 
+            // Elaborazione per Theta
             List<double> tempT = data[1].GetRange(start, data[1].Count - start);
             List<double> smoothedTheta = Functions.Smooth(tempT, range);
 
+            // Elaborazione modulo accelerometro
             List<double> tempA = data[0].GetRange(start, data[0].Count - start);
             List<double> smoothedAcc = Functions.Smooth(tempA, range);
             List<double> stdDevAcc = Functions.StdDev(tempA, range);
 
+            // Elaborazione modulo giroscopio
+            List<double> tempG = data[7].GetRange(start, data[7].Count - start);
+            List<double> smoothedGyr = Functions.Smooth(tempG, range);
 
+            // Elaborazione angolo di Yaw
             List<double> tempY = data[2].GetRange(start, data[2].Count - start);
             List<double> smoothedYaw = Functions.Smooth(tempY, range);
 
+            // Elaborazione lay-sit-stand e accelerazione sull'asse Y
             List<double> tempAccX = data[5].GetRange(start, data[5].Count - start);
             List<double> smoothedAccX = Functions.Smooth(tempAccX, range);
-            List<double> stdDevAccX = Functions.StdDev(tempAccX, range);
             List<int> lss = Functions.lss(smoothedAccX);
             List<int> lss2 = Functions.lss(smoothedAccX);
             Functions.lssMod(lss);
 
+            // Elaborazione deadReckoning
             List<double> tempAV = data[6].GetRange(start, data[6].Count - start);
-            List<double> smoothedAccV = Functions.Smooth(tempA, range);
-            List<double> stdDevAccV = Functions.StdDev(tempA, range);
+            List<double> smoothedAccV = Functions.Smooth(tempAV, range);
+            List<double> stdDevAccV = Functions.StdDev(tempAV, range);
             List<List<double>> deadReckoningList = Functions.deadReckoning(stdDevAccV, smoothedYaw, lss, lastX, lastY);
 
             lastX = deadReckoningList[0][deadReckoningList[0].Count - 1];
             lastY = deadReckoningList[1][deadReckoningList[0].Count - 1];
 
+            // Passaggio dati al form
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][start2]*/, lss[j]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ data[5][start2], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
+                pointsQueue.EnqueueElement(new double[] { smoothedAcc[j], smoothedGyr[j], smoothedTheta[j], lss[j], smoothedAccV[j], smoothedYaw[j], stdDevAcc[j], lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
                 start2++;
             }
 
@@ -147,7 +158,7 @@ namespace ProgettoCS
                 data[k].UpdateWindow();
 
 
-            
+
 
         }
 

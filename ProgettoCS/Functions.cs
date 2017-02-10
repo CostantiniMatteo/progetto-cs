@@ -199,9 +199,9 @@ namespace ProgettoCS
                 double velocita = motoStazionario(devStd[i]);
                 double spostamento = velocita * 0.02; //secondi
 
-                result[0].Add(result[0][i] + spostamento * Math.Cos(ayaws[i]));
-                result[1].Add(result[1][i] + spostamento * Math.Sin(ayaws[i]));
-                /*
+               /* result[0].Add(result[0][i] + spostamento * Math.Cos(ayaws[i]));
+                result[1].Add(result[1][i] + spostamento * Math.Sin(ayaws[i]));*/
+                
                 if (laySitStand[i] == 3)
                 {
                     result[0].Add(result[0][i] + spostamento * Math.Cos(ayaws[i]));
@@ -210,7 +210,7 @@ namespace ProgettoCS
                 {
                     result[0].Add(result[0][i]);
                     result[1].Add(result[1][i]);
-                }*/
+                }
                 
             }
 
