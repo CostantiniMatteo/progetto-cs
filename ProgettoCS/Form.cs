@@ -121,7 +121,7 @@ namespace ProgettoCS
 
         public void Draw()
         {
-            Color c = Color.Red;
+            Color[] c = {Color.Red, Color.Blue, Color.Green, Color.OrangeRed, Color.Red, Color.Blue, Color.Green};
             double x = 0;
             lastTime = 0;
 
@@ -133,14 +133,14 @@ namespace ProgettoCS
                 {
                     for (int i = 0; i < points.Length - 3; i++)
                     {
-                        UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
+                        UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c[i]);
                     }
 
                     generateGroupBox(points[7], x);
 
                     lastLss = (int)points[7];
 
-                    UpgradeGraph((ZedGraphControl)zedList.ElementAt(7), points[8], points[9], c);
+                    UpgradeGraph((ZedGraphControl)zedList.ElementAt(7), points[8], points[9], Color.OrangeRed);
 
 
                     Thread.Sleep(15);
