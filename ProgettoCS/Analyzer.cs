@@ -91,7 +91,7 @@ namespace ProgettoCS
                 // Roll
                 data[4].Add(Functions.Roll(p.GetQuat(0, 0), p.GetQuat(0, 1), p.GetQuat(0, 2), p.GetQuat(0, 3)));
 
-                // Asse Y Accelerometro
+                // Asse X Accelerometro
                 data[5].Add(p.GetAccX(0));
 
                 // Accelerazione su piano orizzonatale
@@ -124,21 +124,22 @@ namespace ProgettoCS
 
             List<double> tempAccX = data[5].GetRange(start, data[5].Count - start);
             List<double> smoothedAccX = Functions.Smooth(tempAccX, range);
-            List<int> lss = Functions.sucaStoLayLaySitSitStand(smoothedAccX);
-            List<int> lss2 = Functions.sucaStoLayLaySitSitStand(smoothedAccX);
-            Functions.laySitBello(lss);
+            List<double> stdDevAccX = Functions.StdDev(tempAccX, range);
+            List<int> lss = Functions.lss(smoothedAccX);
+            List<int> lss2 = Functions.lss(smoothedAccX);
+            Functions.lssMod(lss);
 
             List<double> tempAV = data[6].GetRange(start, data[6].Count - start);
             List<double> smoothedAccV = Functions.Smooth(tempA, range);
             List<double> stdDevAccV = Functions.StdDev(tempA, range);
-            List<List<double>> deadReckoningList = Functions.deadReckoning(stdDevAccV, smoothedYaw, lastX, lastY);
+            List<List<double>> deadReckoningList = Functions.deadReckoning(stdDevAccV, smoothedYaw, lss, lastX, lastY);
 
             lastX = deadReckoningList[0][deadReckoningList[0].Count - 1];
             lastY = deadReckoningList[1][deadReckoningList[0].Count - 1];
 
             for (var j = 0; j < smoothedTheta.Count; j++)
             {
-                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][start2]*/, lss2[j]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ tempAccX[j], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
+                pointsQueue.EnqueueElement(new double[] { smoothedYaw[j]/*data[2][start2]*/, lss[j]/*smoothedAcc[j]*/, /*data[1][peppinoDiCapri]*/ data[5][start2], /*smoothedTheta[j]lss[j]*/lss[j], deadReckoningList[0][j], deadReckoningList[1][j] });
                 start2++;
             }
 
