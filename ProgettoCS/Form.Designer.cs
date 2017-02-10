@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.zedGraphControl4 = new ZedGraph.ZedGraphControl();
-            this.zedGraphControl3 = new ZedGraph.ZedGraphControl();
-            this.zedGraphControl2 = new ZedGraph.ZedGraphControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -58,100 +53,30 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.zedGraphControl4 = new ZedGraph.ZedGraphControl();
+            this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
+            this.zedGraphControl3 = new ZedGraph.ZedGraphControl();
+            this.zedGraphControl2 = new ZedGraph.ZedGraphControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.zedGraphControl8 = new ZedGraph.ZedGraphControl();
+            this.zedGraphControl5 = new ZedGraph.ZedGraphControl();
+            this.zedGraphControl7 = new ZedGraph.ZedGraphControl();
+            this.zedGraphControl6 = new ZedGraph.ZedGraphControl();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // zedGraphControl1
-            // 
-            this.zedGraphControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.zedGraphControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.zedGraphControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.zedGraphControl1.Location = new System.Drawing.Point(2, 2);
-            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.zedGraphControl1.Name = "zedGraphControl1";
-            this.zedGraphControl1.ScrollGrace = 0D;
-            this.zedGraphControl1.ScrollMaxX = 0D;
-            this.zedGraphControl1.ScrollMaxY = 0D;
-            this.zedGraphControl1.ScrollMaxY2 = 0D;
-            this.zedGraphControl1.ScrollMinX = 0D;
-            this.zedGraphControl1.ScrollMinY = 0D;
-            this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(370, 213);
-            this.zedGraphControl1.TabIndex = 0;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl4, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl3, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl2, 1, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 12);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(750, 437);
-            this.tableLayoutPanel1.TabIndex = 2;
-            // 
-            // zedGraphControl4
-            // 
-            this.zedGraphControl4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.zedGraphControl4.BackColor = System.Drawing.SystemColors.Control;
-            this.zedGraphControl4.Location = new System.Drawing.Point(379, 222);
-            this.zedGraphControl4.Margin = new System.Windows.Forms.Padding(4);
-            this.zedGraphControl4.Name = "zedGraphControl4";
-            this.zedGraphControl4.ScrollGrace = 0D;
-            this.zedGraphControl4.ScrollMaxX = 0D;
-            this.zedGraphControl4.ScrollMaxY = 0D;
-            this.zedGraphControl4.ScrollMaxY2 = 0D;
-            this.zedGraphControl4.ScrollMinX = 0D;
-            this.zedGraphControl4.ScrollMinY = 0D;
-            this.zedGraphControl4.ScrollMinY2 = 0D;
-            this.zedGraphControl4.Size = new System.Drawing.Size(367, 210);
-            this.zedGraphControl4.TabIndex = 4;
-            // 
-            // zedGraphControl3
-            // 
-            this.zedGraphControl3.BackColor = System.Drawing.SystemColors.Control;
-            this.zedGraphControl3.Location = new System.Drawing.Point(4, 222);
-            this.zedGraphControl3.Margin = new System.Windows.Forms.Padding(4);
-            this.zedGraphControl3.Name = "zedGraphControl3";
-            this.zedGraphControl3.ScrollGrace = 0D;
-            this.zedGraphControl3.ScrollMaxX = 0D;
-            this.zedGraphControl3.ScrollMaxY = 0D;
-            this.zedGraphControl3.ScrollMaxY2 = 0D;
-            this.zedGraphControl3.ScrollMinX = 0D;
-            this.zedGraphControl3.ScrollMinY = 0D;
-            this.zedGraphControl3.ScrollMinY2 = 0D;
-            this.zedGraphControl3.Size = new System.Drawing.Size(367, 210);
-            this.zedGraphControl3.TabIndex = 3;
-            // 
-            // zedGraphControl2
-            // 
-            this.zedGraphControl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.zedGraphControl2.BackColor = System.Drawing.SystemColors.Control;
-            this.zedGraphControl2.Location = new System.Drawing.Point(379, 4);
-            this.zedGraphControl2.Margin = new System.Windows.Forms.Padding(4);
-            this.zedGraphControl2.Name = "zedGraphControl2";
-            this.zedGraphControl2.ScrollGrace = 0D;
-            this.zedGraphControl2.ScrollMaxX = 0D;
-            this.zedGraphControl2.ScrollMaxY = 0D;
-            this.zedGraphControl2.ScrollMaxY2 = 0D;
-            this.zedGraphControl2.ScrollMinX = 0D;
-            this.zedGraphControl2.ScrollMinY = 0D;
-            this.zedGraphControl2.ScrollMinY2 = 0D;
-            this.zedGraphControl2.Size = new System.Drawing.Size(367, 210);
-            this.zedGraphControl2.TabIndex = 2;
             // 
             // groupBox1
             // 
@@ -405,22 +330,227 @@
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(3, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(758, 460);
+            this.tabControl1.TabIndex = 6;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(750, 434);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl4, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl3, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.zedGraphControl2, 1, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(750, 437);
+            this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // zedGraphControl4
+            // 
+            this.zedGraphControl4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.zedGraphControl4.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl4.Location = new System.Drawing.Point(377, 220);
+            this.zedGraphControl4.Margin = new System.Windows.Forms.Padding(2);
+            this.zedGraphControl4.Name = "zedGraphControl4";
+            this.zedGraphControl4.ScrollGrace = 0D;
+            this.zedGraphControl4.ScrollMaxX = 0D;
+            this.zedGraphControl4.ScrollMaxY = 0D;
+            this.zedGraphControl4.ScrollMaxY2 = 0D;
+            this.zedGraphControl4.ScrollMinX = 0D;
+            this.zedGraphControl4.ScrollMinY = 0D;
+            this.zedGraphControl4.ScrollMinY2 = 0D;
+            this.zedGraphControl4.Size = new System.Drawing.Size(367, 210);
+            this.zedGraphControl4.TabIndex = 4;
+            // 
+            // zedGraphControl1
+            // 
+            this.zedGraphControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.zedGraphControl1.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.zedGraphControl1.Location = new System.Drawing.Point(2, 2);
+            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.zedGraphControl1.Name = "zedGraphControl1";
+            this.zedGraphControl1.ScrollGrace = 0D;
+            this.zedGraphControl1.ScrollMaxX = 0D;
+            this.zedGraphControl1.ScrollMaxY = 0D;
+            this.zedGraphControl1.ScrollMaxY2 = 0D;
+            this.zedGraphControl1.ScrollMinX = 0D;
+            this.zedGraphControl1.ScrollMinY = 0D;
+            this.zedGraphControl1.ScrollMinY2 = 0D;
+            this.zedGraphControl1.Size = new System.Drawing.Size(370, 213);
+            this.zedGraphControl1.TabIndex = 0;
+            // 
+            // zedGraphControl3
+            // 
+            this.zedGraphControl3.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl3.Location = new System.Drawing.Point(2, 220);
+            this.zedGraphControl3.Margin = new System.Windows.Forms.Padding(2);
+            this.zedGraphControl3.Name = "zedGraphControl3";
+            this.zedGraphControl3.ScrollGrace = 0D;
+            this.zedGraphControl3.ScrollMaxX = 0D;
+            this.zedGraphControl3.ScrollMaxY = 0D;
+            this.zedGraphControl3.ScrollMaxY2 = 0D;
+            this.zedGraphControl3.ScrollMinX = 0D;
+            this.zedGraphControl3.ScrollMinY = 0D;
+            this.zedGraphControl3.ScrollMinY2 = 0D;
+            this.zedGraphControl3.Size = new System.Drawing.Size(367, 210);
+            this.zedGraphControl3.TabIndex = 3;
+            // 
+            // zedGraphControl2
+            // 
+            this.zedGraphControl2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.zedGraphControl2.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl2.Location = new System.Drawing.Point(377, 2);
+            this.zedGraphControl2.Margin = new System.Windows.Forms.Padding(2);
+            this.zedGraphControl2.Name = "zedGraphControl2";
+            this.zedGraphControl2.ScrollGrace = 0D;
+            this.zedGraphControl2.ScrollMaxX = 0D;
+            this.zedGraphControl2.ScrollMaxY = 0D;
+            this.zedGraphControl2.ScrollMaxY2 = 0D;
+            this.zedGraphControl2.ScrollMinX = 0D;
+            this.zedGraphControl2.ScrollMinY = 0D;
+            this.zedGraphControl2.ScrollMinY2 = 0D;
+            this.zedGraphControl2.Size = new System.Drawing.Size(371, 214);
+            this.zedGraphControl2.TabIndex = 2;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.tableLayoutPanel2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(750, 434);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel2.BackColor = System.Drawing.SystemColors.Control;
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.zedGraphControl8, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.zedGraphControl5, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.zedGraphControl7, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.zedGraphControl6, 1, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, -1);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(750, 437);
+            this.tableLayoutPanel2.TabIndex = 4;
+            // 
+            // zedGraphControl8
+            // 
+            this.zedGraphControl8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.zedGraphControl8.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl8.Location = new System.Drawing.Point(377, 220);
+            this.zedGraphControl8.Margin = new System.Windows.Forms.Padding(2);
+            this.zedGraphControl8.Name = "zedGraphControl8";
+            this.zedGraphControl8.ScrollGrace = 0D;
+            this.zedGraphControl8.ScrollMaxX = 0D;
+            this.zedGraphControl8.ScrollMaxY = 0D;
+            this.zedGraphControl8.ScrollMaxY2 = 0D;
+            this.zedGraphControl8.ScrollMinX = 0D;
+            this.zedGraphControl8.ScrollMinY = 0D;
+            this.zedGraphControl8.ScrollMinY2 = 0D;
+            this.zedGraphControl8.Size = new System.Drawing.Size(367, 210);
+            this.zedGraphControl8.TabIndex = 4;
+            // 
+            // zedGraphControl5
+            // 
+            this.zedGraphControl5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.zedGraphControl5.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl5.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.zedGraphControl5.Location = new System.Drawing.Point(2, 2);
+            this.zedGraphControl5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.zedGraphControl5.Name = "zedGraphControl5";
+            this.zedGraphControl5.ScrollGrace = 0D;
+            this.zedGraphControl5.ScrollMaxX = 0D;
+            this.zedGraphControl5.ScrollMaxY = 0D;
+            this.zedGraphControl5.ScrollMaxY2 = 0D;
+            this.zedGraphControl5.ScrollMinX = 0D;
+            this.zedGraphControl5.ScrollMinY = 0D;
+            this.zedGraphControl5.ScrollMinY2 = 0D;
+            this.zedGraphControl5.Size = new System.Drawing.Size(370, 213);
+            this.zedGraphControl5.TabIndex = 0;
+            // 
+            // zedGraphControl7
+            // 
+            this.zedGraphControl7.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl7.Location = new System.Drawing.Point(2, 220);
+            this.zedGraphControl7.Margin = new System.Windows.Forms.Padding(2);
+            this.zedGraphControl7.Name = "zedGraphControl7";
+            this.zedGraphControl7.ScrollGrace = 0D;
+            this.zedGraphControl7.ScrollMaxX = 0D;
+            this.zedGraphControl7.ScrollMaxY = 0D;
+            this.zedGraphControl7.ScrollMaxY2 = 0D;
+            this.zedGraphControl7.ScrollMinX = 0D;
+            this.zedGraphControl7.ScrollMinY = 0D;
+            this.zedGraphControl7.ScrollMinY2 = 0D;
+            this.zedGraphControl7.Size = new System.Drawing.Size(367, 210);
+            this.zedGraphControl7.TabIndex = 3;
+            // 
+            // zedGraphControl6
+            // 
+            this.zedGraphControl6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.zedGraphControl6.BackColor = System.Drawing.SystemColors.Control;
+            this.zedGraphControl6.Location = new System.Drawing.Point(377, 2);
+            this.zedGraphControl6.Margin = new System.Windows.Forms.Padding(2);
+            this.zedGraphControl6.Name = "zedGraphControl6";
+            this.zedGraphControl6.ScrollGrace = 0D;
+            this.zedGraphControl6.ScrollMaxX = 0D;
+            this.zedGraphControl6.ScrollMaxY = 0D;
+            this.zedGraphControl6.ScrollMaxY2 = 0D;
+            this.zedGraphControl6.ScrollMinX = 0D;
+            this.zedGraphControl6.ScrollMinY = 0D;
+            this.zedGraphControl6.ScrollMinY2 = 0D;
+            this.zedGraphControl6.Size = new System.Drawing.Size(371, 214);
+            this.zedGraphControl6.TabIndex = 2;
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(984, 755);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(18, 9, 18, 9);
             this.Name = "Form";
-            this.Text = "Form1";
+            this.Text = "Progetto C#";
             this.Load += new System.EventHandler(this.Form_Load);
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -429,16 +559,16 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private ZedGraph.ZedGraphControl zedGraphControl1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private ZedGraph.ZedGraphControl zedGraphControl2;
-        private ZedGraph.ZedGraphControl zedGraphControl3;
-        private ZedGraph.ZedGraphControl zedGraphControl4;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -463,6 +593,19 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private ZedGraph.ZedGraphControl zedGraphControl4;
+        private ZedGraph.ZedGraphControl zedGraphControl1;
+        private ZedGraph.ZedGraphControl zedGraphControl2;
+        private ZedGraph.ZedGraphControl zedGraphControl3;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private ZedGraph.ZedGraphControl zedGraphControl8;
+        private ZedGraph.ZedGraphControl zedGraphControl5;
+        private ZedGraph.ZedGraphControl zedGraphControl7;
+        private ZedGraph.ZedGraphControl zedGraphControl6;
     }
 }
 
