@@ -40,6 +40,12 @@ namespace ProgettoCS
             groupBoxCount = 3;
             lastTime = 0;
 
+            tabControl1.TabPages[0].Text = "Grafici di base";
+            tabControl1.TabPages[1].Text = "Dead Reckoning";
+
+            tabControl1.SizeMode = TabSizeMode.Fixed;
+            tabControl1.ItemSize = new Size(tabControl1.Width / 4, 0);
+
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
             thetaGraph = zedGraphControl3.GraphPane;
