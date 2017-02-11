@@ -184,6 +184,7 @@ namespace ProgettoCS
             else if (devStd < soglia2) return 1;
             else if (devStd < soglia3) return 4;
             else return 6;
+
             // MOTO STAZIONARIO CON DUE SOGLIE
             /*
             double sogliola = 0.5;
