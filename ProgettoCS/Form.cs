@@ -19,7 +19,8 @@ namespace ProgettoCS
     public partial class Form : System.Windows.Forms.Form
     {
 
-        private GraphPane accelerometerGraph, gyroscopeGraph, magnetometerGraph, magnetometerDiscGraph;
+        private GraphPane accelerometerGraph, gyroscopeGraph, thetaGraph, laySitGraph,
+            accelerometerXYGraph, yawGraph, stdDevGraph, deadReckoningGraph;
         private PointsQueue pointsQueue;
         private IEnumerable<Control> zedList;
         private IEnumerable<Control> groupBoxList;
@@ -29,59 +30,72 @@ namespace ProgettoCS
 
         public Form(PointsQueue pq)
         {
+            zedList = GetAll(this, typeof(ZedGraphControl));
+            zedList = zedList.OrderBy(ZedGraphControl => ZedGraphControl.Name);
+
+            File.Delete(".../output.csv");
+
             InitializeComponent();
             Resize();
             groupBoxCount = 3;
             lastTime = 0;
 
-            File.Delete("../output.csv");
-            
-            zedList = GetAll(this, typeof(ZedGraphControl));
-            zedList = zedList.OrderBy(ZedGraphControl => ZedGraphControl.Name);
-
-
             accelerometerGraph = zedGraphControl1.GraphPane;
             gyroscopeGraph = zedGraphControl2.GraphPane;
-            magnetometerGraph = zedGraphControl3.GraphPane;
-            magnetometerDiscGraph = zedGraphControl4.GraphPane;
+            thetaGraph = zedGraphControl3.GraphPane;
+            laySitGraph = zedGraphControl4.GraphPane;
+            accelerometerXYGraph = zedGraphControl5.GraphPane;
+            yawGraph = zedGraphControl6.GraphPane;
+            stdDevGraph = zedGraphControl7.GraphPane;
+            deadReckoningGraph = zedGraphControl8.GraphPane;
 
             accelerometerGraph.YAxis.Title.Text = "m/s²";
             accelerometerGraph.XAxis.Title.Text = "second";
 
-            gyroscopeGraph.YAxis.Title.Text = "m/s²";
+            gyroscopeGraph.YAxis.Title.Text = "rad/s";
             gyroscopeGraph.XAxis.Title.Text = "second";
 
-            magnetometerGraph.YAxis.Title.Text = "π";
-            magnetometerGraph.XAxis.Title.Text = "second";
+            thetaGraph.YAxis.Title.Text = "radiants";
+            thetaGraph.XAxis.Title.Text = "second";
 
-            magnetometerDiscGraph.YAxis.Title.Text = "π";
-            magnetometerDiscGraph.XAxis.Title.Text = "second";
+            laySitGraph.YAxis.Title.Text = "State";
+            laySitGraph.XAxis.Title.Text = "second";
 
-            accelerometerGraph.IsFontsScaled = false;
-            gyroscopeGraph.IsFontsScaled = false;
-            magnetometerGraph.IsFontsScaled = false;
-            magnetometerDiscGraph.IsFontsScaled = false;
+            accelerometerXYGraph.YAxis.Title.Text = "m/s²";
+            accelerometerXYGraph.XAxis.Title.Text = "second";
 
-            accelerometerGraph.Title.Text = "Accelerometro non smutato accelerazione";
-            gyroscopeGraph.Title.Text = "Accelerazione smutata però ci serve aspetta vabbè metti accelerazione smutata ti spacco la faccia";
-            magnetometerGraph.Title.Text = "Il terzo è il terzo è il terzo è il terzo è hahaha il terzo è teta hahaha";
-            magnetometerDiscGraph.Title.Text = "Smuted teta sisi dai scrivi muoviti";
+            yawGraph.YAxis.Title.Text = "radiants";
+            yawGraph.XAxis.Title.Text = "second";
 
-            accelerometerGraph.XAxis.MajorGrid.IsVisible = true;
-            accelerometerGraph.YAxis.MajorGrid.IsVisible = true;
+            stdDevGraph.YAxis.Title.Text = "m/s²";
+            stdDevGraph.XAxis.Title.Text = "second";
 
-            gyroscopeGraph.XAxis.MajorGrid.IsVisible = true;
-            gyroscopeGraph.YAxis.MajorGrid.IsVisible = true;
+            deadReckoningGraph.YAxis.Title.Text = "m";
+            deadReckoningGraph.XAxis.Title.Text = "m";
 
-            magnetometerGraph.XAxis.MajorGrid.IsVisible = true;
-            magnetometerGraph.YAxis.MajorGrid.IsVisible = true;
 
-            magnetometerDiscGraph.XAxis.MajorGrid.IsVisible = true;
-            magnetometerDiscGraph.YAxis.MajorGrid.IsVisible = true;
+            accelerometerGraph.Title.Text = "Modulo accelerometro smoothed";
+            gyroscopeGraph.Title.Text = "Modulo giroscopio smoothed";
+            thetaGraph.Title.Text = "Angolo theta";
+            laySitGraph.Title.Text = "Lay Sit Stand";
+            accelerometerXYGraph.Title.Text = "Modulo accelerometro smoothed sul piano XY";
+            yawGraph.Title.Text = "Angolo Yaw";
+            stdDevGraph.Title.Text = "Deviazione standard del modulo dell'accelerazione";
+            deadReckoningGraph.Title.Text = "Dead Reckoning";
 
+            for (int i = 0; i < zedList.Count(); i++)
+            {
+                ZedGraphControl z = (ZedGraphControl)zedList.ElementAt(i);
+                GraphPane myPane = z.GraphPane;
+
+                myPane.IsFontsScaled = false;
+                myPane.XAxis.MajorGrid.IsVisible = true;
+                myPane.YAxis.MajorGrid.IsVisible = true;
+            }
 
             this.pointsQueue = pq;
         }
+
 
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         private void Resize()
@@ -90,17 +104,23 @@ namespace ProgettoCS
             this.Location = new Point(0, 0);
             this.Size = Screen.PrimaryScreen.WorkingArea.Size;
             this.WindowState = FormWindowState.Maximized;
-            tableLayoutPanel1.Size = new Size(this.Width - 250, this.Height - 63);
-            zedGraphControl1.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
-            zedGraphControl2.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
-            zedGraphControl3.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
-            zedGraphControl4.Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
+            tabControl1.Size = new Size(this.Width - 250, this.Height - 63);
+            tableLayoutPanel1.Size = new Size(tabControl1.Size.Width - 8, tabControl1.Size.Height - 13);
+            tableLayoutPanel2.Size = new Size(tabControl1.Size.Width - 8, tabControl1.Size.Height - 13);
+
+            for (int i = 0; i < zedList.Count(); i++)
+            {
+                zedList.ElementAt(i).Size = new Size(tableLayoutPanel1.Size.Width / 2, tableLayoutPanel1.Size.Height / 2);
+            }
 
         }
 
+
+
+
         public void Draw()
         {
-            Color c = Color.Red;
+            Color[] c = {Color.Red, Color.Blue, Color.Green, Color.OrangeRed, Color.Red, Color.Blue, Color.Green};
             double x = 0;
             lastTime = 0;
 
@@ -110,24 +130,22 @@ namespace ProgettoCS
 
                 if (points != null && !Program.stop)
                 {
-                    for (int i = 0; i < points.Length - 3 ; i++)
+                    for (int i = 0; i < points.Length - 3; i++)
                     {
-                        UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c);
+                        UpgradeGraph((ZedGraphControl)zedList.ElementAt(i), x, points[i], c[i]);
                     }
 
-                    generateGroupBox(points[3], x);
+                    generateGroupBox(points[7], x);
 
-                    lastLss = (int)points[3];
+                    lastLss = (int)points[7];
 
-                    UpgradeGraph((ZedGraphControl)zedList.ElementAt(3), points[4], points[5], c);
+                    UpgradeGraph((ZedGraphControl)zedList.ElementAt(7), points[8], points[9], Color.OrangeRed);
 
 
                     Thread.Sleep(15);
                     x += 0.02;
                 }
             }
-            
-
         }
 
         private void generateGroupBox(double p, double x)
@@ -288,6 +306,11 @@ namespace ProgettoCS
             textBox2.Enabled = true;
             textBox3.Enabled = true;
             textBox4.Enabled = true;
+        }
+
+        private void zedGraphControl2_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void button1_Click(object sender, EventArgs e)
