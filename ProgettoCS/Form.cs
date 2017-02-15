@@ -262,6 +262,22 @@ namespace ProgettoCS
                     pane.AddCurve("", ppl, c, SymbolType.None);
                 }
             }
+
+
+            if(!z.Name.Equals("zedGraphControl8"))
+            {
+                if(x < 10)
+                {
+                    pane.XAxis.Scale.Min = 0;
+                    pane.XAxis.Scale.Max = 10;
+                }
+                else
+                {
+                    pane.XAxis.Scale.Min = x - 10;
+                    pane.XAxis.Scale.Max = x;
+                } 
+            }
+
             z.AxisChange();
             z.Invalidate();
         }
