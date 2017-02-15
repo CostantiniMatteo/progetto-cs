@@ -33,7 +33,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -84,11 +83,10 @@
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.richTextBox1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(760, 12);
+            this.groupBox1.Location = new System.Drawing.Point(761, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(211, 216);
+            this.groupBox1.Size = new System.Drawing.Size(211, 79);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection info";
@@ -123,16 +121,6 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Status:";
             // 
-            // richTextBox1
-            // 
-            this.richTextBox1.BackColor = System.Drawing.Color.Aquamarine;
-            this.richTextBox1.Location = new System.Drawing.Point(7, 86);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.richTextBox1.Size = new System.Drawing.Size(198, 121);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
-            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -150,9 +138,9 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(758, 235);
+            this.groupBox2.Location = new System.Drawing.Point(761, 97);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(213, 214);
+            this.groupBox2.Size = new System.Drawing.Size(211, 214);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Graphs Settings";
@@ -289,7 +277,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.AutoScroll = true;
             this.flowLayoutPanel1.Controls.Add(this.groupBox3);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(760, 456);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(761, 337);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(211, 287);
             this.flowLayoutPanel1.TabIndex = 5;
@@ -575,7 +563,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button1;

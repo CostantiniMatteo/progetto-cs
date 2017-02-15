@@ -126,12 +126,13 @@ namespace ProgettoCS
 
         public void Draw()
         {
-            Color[] c = {Color.Red, Color.Blue, Color.Green, Color.OrangeRed, Color.Red, Color.Blue, Color.Green};
+            Color[] c = { Color.Red, Color.Blue, Color.Green, Color.OrangeRed, Color.Red, Color.Blue, Color.Green };
             double x = 0;
             lastTime = 0;
 
             while (!Program.stop)
             {
+
                 double[] points = pointsQueue.GetNextElement();
 
                 if (points != null && !Program.stop)
@@ -151,12 +152,15 @@ namespace ProgettoCS
                     Thread.Sleep(15);
                     x += 0.02;
                 }
+
+                //setConnection();
+
             }
         }
 
         private void generateGroupBox(double p, double x)
         {
-            if ((p != lastLss && lastTime != x ) || (pointsQueue.LastWindow && pointsQueue.Count == 0))
+            if ((p != lastLss && lastTime != x) || (pointsQueue.LastWindow && pointsQueue.Count == 0))
             {
                 GroupBox gbx = new GroupBox();
                 PictureBox pic = new PictureBox();
@@ -198,7 +202,7 @@ namespace ProgettoCS
 
                 l1.Location = new System.Drawing.Point(102, 17);
                 l1.TabIndex = 0;
-                l1.Text = "from: "+ from + " sec";
+                l1.Text = "from: " + from + " sec";
 
                 l2.Location = new System.Drawing.Point(102, 61);
                 l2.TabIndex = 2;
@@ -215,14 +219,14 @@ namespace ProgettoCS
                 gbx.Name = "groupBox" + (groupBoxCount + 1);
                 gbx.Visible = true;
 
-                this.Invoke((MethodInvoker)delegate ()
+                this.BeginInvoke((MethodInvoker)delegate ()
                 {
                     flowLayoutPanel1.Controls.Add(gbx);
                     flowLayoutPanel1.Refresh();
                 });
 
                 lastTime = x;
-                
+
             }
 
         }
@@ -277,6 +281,29 @@ namespace ProgettoCS
             groupBoxList = groupBoxList.OrderBy(GroupBox => GroupBox.Name);
 
             flowLayoutPanel1.Controls.Clear();
+
+        }
+
+        private void setConnection()
+        {
+
+                if (Program.connected && label2.Text == "DISCONNECTED")
+                {
+                    this.BeginInvoke((MethodInvoker)delegate ()
+                    {
+                        label2.Text = "CONNECTED";
+                        label2.ForeColor = Color.Green;
+                    });
+                }
+                else if (!Program.connected && label2.Text == "CONNECTED")
+                {
+                    this.BeginInvoke((MethodInvoker)delegate ()
+                    {
+                        label2.Text = "DISCONNECTED";
+                        label2.ForeColor = Color.Red;
+                    });
+                }
+            
 
         }
 
