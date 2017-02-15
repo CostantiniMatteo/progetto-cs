@@ -153,8 +153,6 @@ namespace ProgettoCS
                     x += 0.02;
                 }
 
-                //setConnection();
-
             }
         }
 
@@ -300,28 +298,6 @@ namespace ProgettoCS
 
         }
 
-        private void setConnection()
-        {
-
-                if (Program.connected && label2.Text == "DISCONNECTED")
-                {
-                    this.BeginInvoke((MethodInvoker)delegate ()
-                    {
-                        label2.Text = "CONNECTED";
-                        label2.ForeColor = Color.Green;
-                    });
-                }
-                else if (!Program.connected && label2.Text == "CONNECTED")
-                {
-                    this.BeginInvoke((MethodInvoker)delegate ()
-                    {
-                        label2.Text = "DISCONNECTED";
-                        label2.ForeColor = Color.Red;
-                    });
-                }
-            
-
-        }
 
         //EVENTI
 
