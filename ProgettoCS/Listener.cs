@@ -35,6 +35,7 @@ namespace ProgettoCS
 
             client = server.AcceptTcpClient();
 
+
             NetworkStream stream = client.GetStream();
             BinaryReader bin = new BinaryReader(stream);
 

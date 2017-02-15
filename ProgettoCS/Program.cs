@@ -49,6 +49,9 @@ namespace ProgettoCS {
             listenerThread = new Thread(l.Parse);
             analyzerThread = new Thread(a.Read);
             drawThread = new Thread(f.Draw);
+            listenerThread.Name = "listenerThread";
+            analyzerThread.Name = "analyzerThread";
+            drawThread.Name = "drawThread";
 
             pointsQueue.RemoveAllElements();
             packetQueue.RemoveAllElements();
@@ -67,5 +70,6 @@ namespace ProgettoCS {
                 stop = true;
             }
         }
+
     }
 }

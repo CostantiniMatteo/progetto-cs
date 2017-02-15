@@ -184,6 +184,16 @@ namespace ProgettoCS
             else if (devStd < soglia2) return 1;
             else if (devStd < soglia3) return 4;
             else return 6;
+
+            // MOTO STAZIONARIO CON DUE SOGLIE
+            /*
+            double sogliola = 0.5;
+            double sogliola2 = 4;
+
+            if(devStd < sogliola) return 0;
+            else if(devStd < sogliola2) return 3; // m/s Cammino
+            else return 6; // m/s Corsa
+            */
         }
 
         public static List<List<double>> deadReckoning(List<double> devStd, List<double> ayaws, List<int> laySitStand, double lastX, double lastY)
