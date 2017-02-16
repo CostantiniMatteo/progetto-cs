@@ -27,6 +27,7 @@ namespace ProgettoCS
         private int lastLss;
         private int groupBoxCount;
         private double lastTime;
+        private DateTime startTime;
 
         public Form(PointsQueue pq)
         {
@@ -39,6 +40,7 @@ namespace ProgettoCS
             Resize();
             groupBoxCount = 3;
             lastTime = 0;
+            startTime = DateTime.Now;
 
             tabControl1.TabPages[0].Text = "Grafici di base";
             tabControl1.TabPages[1].Text = "Dead Reckoning";
@@ -232,7 +234,7 @@ namespace ProgettoCS
         private void UpdateFile(string action, double from, double to)
         {
             StreamWriter writer = File.AppendText("../output.csv");
-            writer.WriteLine(action + ";" + from + ";" + to);
+            writer.WriteLine(action + ";" + startTime.AddSeconds(from) + ";" + startTime.AddSeconds(to));
             writer.Close();
         }
 
@@ -389,5 +391,9 @@ namespace ProgettoCS
                                       .Where(c => c.GetType() == type);
         }
 
+        public void setStartTime(DateTime startTime)
+        {
+            this.startTime = startTime;
+        }
     }
 }

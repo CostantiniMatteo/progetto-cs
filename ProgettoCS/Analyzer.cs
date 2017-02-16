@@ -15,6 +15,8 @@ namespace ProgettoCS
         private SlidingWindow<Packet> window;
         private bool firstWindow;
         private bool lastWindow;
+        private bool firstRead;
+
         private double lastX, lastY;
         SlidingWindow<double>[] data;
 
@@ -26,6 +28,7 @@ namespace ProgettoCS
             this.packetQueue = packetQueue;
             this.pointsQueue = pointsQueue;
             this.firstWindow = true;
+            this.firstRead = true;
             this.data = new SlidingWindow<double>[8];
             for (var i = 0; i < data.Length; i++)
                 data[i] = new SlidingWindow<double>();
@@ -45,6 +48,12 @@ namespace ProgettoCS
 
                     if (p != null)
                     {
+                        if(firstRead)
+                        {
+                            f.setStartTime(DateTime.Now);
+                            firstRead = false;
+                        }
+
                         if (p.IsLastPacket)
                         {
                             lastWindow = true;
